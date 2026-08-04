@@ -31,8 +31,9 @@ import androidx.compose.ui.window.Dialog
 import `in`.hridayan.ashell.R
 import `in`.hridayan.ashell.shell.DeviceProfile
 
-// GitHub 仓库链接，暂时留空；填入后点击会打开浏览器跳转
-private const val GITHUB_URL = ""
+// 本项目的 GPL 对应源码仓库
+private const val GITHUB_URL =
+    "https://github.com/qq2070006042-create/yuehong-privilege-assistant"
 
 @Composable
 fun DeviceInfoDialog(onDismiss: () -> Unit) {
