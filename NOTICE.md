@@ -1,0 +1,22 @@
+# Notices and attribution
+
+## Upstream project
+
+- Project: aShellYou
+- Author: DP Hridayan
+- Source: https://github.com/DP-Hridayan/aShellYou
+- License: GNU General Public License v3.0
+
+月虹提权助手是 aShellYou 的非官方修改版本，并非由上游作者发布或背书。
+
+## Modification summary
+
+Modified by the 月虹提权助手 project, last updated 2026-08-04:
+
+- 保留 Shizuku 本地 ADB shell 能力并调整为提权操作界面。
+- 增加设备型号、系统版本和内核版本采集。
+- 增加可配置的 HTTPS 公告与兼容性接口。
+- 增加 payload 下载、大小限制、SHA-256 校验、LD_PRELOAD 执行和 Root 检测流程。
+- 将应用显示名称改为“月虹提权助手”。
+
+版权归各自贡献者所有。本文件不替代 [LICENSE.md](LICENSE.md) 中的 GPL-3.0 条款。

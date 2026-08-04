@@ -1,0 +1,5 @@
+# Copy this file to server.properties for a private connected build.
+# Keep server.properties private; it is ignored by Git and source packages.
+announcementEndpoint=
+compatibilityEndpoint=
+moduleId=
