@@ -28,7 +28,7 @@ moduleId=
 
 - Shizuku 状态检测与授权
 - 本地 ADB shell 命令执行、停止和输出清理
-- 通过独立系统命令采集机型名称、厂商系统版本和真实内核 release，降低应用进程内属性伪装的影响；一加/OPPO/OPlus 优先读取 OTA/ROM 版本，小米/Redmi/POCO 优先读取 incremental
+- 通过独立系统命令采集机型名称、厂商系统版本和真实内核 release，降低应用进程内属性伪装的影响；为小米/OPlus/vivo、三星、华为、荣耀、Pixel、联想/摩托罗拉、魅族、努比亚/ZTE、华硕、索尼、Nothing 等主流厂商设置专用属性顺序，其他品牌使用通用回退
 - 通过兼容性服务选择唯一 payload
 - 下载大小限制与 SHA-256 校验
 - 通过 Shizuku 写入临时目录并使用 LD_PRELOAD 执行
