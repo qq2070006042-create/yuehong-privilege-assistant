@@ -58,9 +58,7 @@ class PrivilegeEscalator(
         updateStage(EscalationStage.CheckingPermission)
         shell.ensurePermission(
             onGranted = { executor.execute { runFlow() } },
-            onDenied = {
-                fail(EscalationStage.CheckingPermission, "Shizuku permission denied")
-            },
+            onDenied = ::cancelForMissingPermission,
         )
     }
 
@@ -74,6 +72,12 @@ class PrivilegeEscalator(
             result = EscalationResult.Idle
             logs.clear()
         }
+    }
+
+    // ShizukuShellController 会显示专用权限提示；这里结束流程但不再生成通用失败结果，
+    // 避免“需要 Shizuku 权限”和“提权失败”两个弹窗同时出现。
+    private fun cancelForMissingPermission() {
+        resetState()
     }
 
     private fun runFlow() {
