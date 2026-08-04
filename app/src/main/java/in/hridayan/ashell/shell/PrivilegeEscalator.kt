@@ -45,9 +45,6 @@ class PrivilegeEscalator(
     var result by mutableStateOf<EscalationResult>(EscalationResult.Idle)
         private set
 
-    // 各阶段的执行日志，供 UI 展示
-    val logs = mutableListOf<String>()
-
     private val mainHandler = Handler(Looper.getMainLooper())
     private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
@@ -55,6 +52,7 @@ class PrivilegeEscalator(
         if (stage != EscalationStage.Idle && stage != EscalationStage.Done) return
 
         resetState()
+        log("starting privilege escalation")
         updateStage(EscalationStage.CheckingPermission)
         shell.ensurePermission(
             onGranted = { executor.execute { runFlow() } },
@@ -70,7 +68,6 @@ class PrivilegeEscalator(
         mainHandler.post {
             stage = EscalationStage.Idle
             result = EscalationResult.Idle
-            logs.clear()
         }
     }
 
@@ -300,15 +297,15 @@ class PrivilegeEscalator(
     }
 
     private fun log(message: String) {
-        mainHandler.post { logs += message }
+        shell.appendOutput("[提权] $message")
     }
 
     private fun fail(stage: EscalationStage, reason: String) {
         mainHandler.post {
             this.stage = EscalationStage.Done
             this.result = EscalationResult.Failure(stage, reason)
-            logs += "FAILED at $stage: $reason"
         }
+        shell.appendOutput("[提权失败][$stage] $reason", isError = true)
     }
 
     override fun close() {

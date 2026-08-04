@@ -63,6 +63,10 @@ fun LocalAdbScreen(
     var showDeviceInfo by remember { mutableStateOf(false) }
     var showEscalationResult by remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
+    val escalationRunning = escalator.stage !in setOf(
+        EscalationStage.Idle,
+        EscalationStage.Done,
+    )
 
     // 流程结束（成功或失败）后弹出结果对话框
     LaunchedEffect(escalator.result) {
@@ -143,7 +147,9 @@ fun LocalAdbScreen(
                         )
                         TextButton(
                             onClick = controller::clear,
-                            enabled = !controller.isRunning && controller.output.isNotEmpty(),
+                            enabled = !controller.isRunning &&
+                                !escalationRunning &&
+                                controller.output.isNotEmpty(),
                         ) {
                             Icon(
                                 modifier = Modifier.size(18.dp),
@@ -342,16 +348,6 @@ private fun EscalationCard(
                     MaterialTheme.colorScheme.onSurface
                 },
             )
-
-            if (escalator.logs.isNotEmpty()) {
-                SelectionContainer {
-                    Text(
-                        text = escalator.logs.joinToString("\n"),
-                        style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            }
 
             Row(
                 modifier = Modifier.fillMaxWidth(),

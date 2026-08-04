@@ -229,6 +229,12 @@ class ShizukuShellController : AutoCloseable {
         if (!isRunning) output.clear()
     }
 
+    fun appendOutput(text: String, isError: Boolean = false) {
+        val normalized = text.trimEnd()
+        if (normalized.isEmpty()) return
+        postToMain { output += OutputLine(normalized, isError) }
+    }
+
     private fun handleDirectoryCommand(command: String): String? {
         if (command == "cd" || command.startsWith("cd ")) {
             val target = command.removePrefix("cd").trim().ifBlank { "/storage/emulated/0" }
