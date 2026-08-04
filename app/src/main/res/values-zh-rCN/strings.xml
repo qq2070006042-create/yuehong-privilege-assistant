@@ -42,6 +42,13 @@
     <string name="github_link_not_configured">GitHub 链接暂未配置。</string>
     <string name="announcement_title">公告</string>
     <string name="announcement_loading">正在加载公告…</string>
+    <string name="announcement_loading_subtitle">正在准备最新公告与版本信息</string>
+    <string name="announcement_security_hint">仅通过已配置的安全连接获取信息</string>
+    <string name="announcement_badge">重要公告</string>
+    <string name="announcement_subtitle">请阅读以下内容后继续使用</string>
+    <string name="announcement_content_label">公告内容</string>
+    <string name="announcement_ready_hint">安全启动 · 确认后进入本地 ADB</string>
+    <string name="announcement_continue">我已了解，继续使用</string>
     <string name="announcement_version_label">服务器版本</string>
     <string name="announcement_author_label">作者</string>
     <string name="local_version_label">本地版本</string>
@@ -49,8 +56,11 @@
     <string name="announcement_author_fallback">月虹提权助手</string>
     <string name="announcement_default_text">欢迎使用月虹提权助手。</string>
     <string name="update_required_title">需要更新</string>
+    <string name="update_badge">版本更新</string>
+    <string name="update_required_subtitle">请安装最新版本后继续使用</string>
     <string name="update_required_message">本地版本 %1$s 与服务器版本 %2$s 不一致，请更新到最新版本后继续使用。</string>
     <string name="update_now">立即更新</string>
     <string name="exit_app">退出应用</string>
     <string name="update_link_not_configured">更新下载链接暂未配置。</string>
 </resources>
+
