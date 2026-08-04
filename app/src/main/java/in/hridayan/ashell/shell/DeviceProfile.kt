@@ -2,6 +2,7 @@ package `in`.hridayan.ashell.shell
 
 import android.os.Build
 import android.system.Os
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 data class DeviceProfile(
@@ -21,16 +22,42 @@ data class DeviceProfile(
         fun collect(): DeviceProfile {
             // 使用独立原生命令读取系统属性，避免仅在当前应用进程内生效的 Build/getprop Hook。
             val model = firstSystemProperty(
-                "ro.product.device",
-                "ro.product.vendor.device",
-                "ro.product.odm.device",
-                "ro.product.system.device",
-            ).ifBlank { Build.DEVICE.clean() }
+                "ro.product.marketname",
+                "ro.product.vendor.marketname",
+                "ro.product.odm.marketname",
+                "ro.product.model",
+                "ro.product.vendor.model",
+            ).ifBlank { Build.MODEL.clean() }
 
-            val systemVersion = firstSystemProperty(
-                "ro.build.version.incremental",
-                "ro.build.display.id",
-            ).ifBlank {
+            val vendorIdentity = listOf(
+                firstSystemProperty("ro.product.brand"),
+                firstSystemProperty("ro.product.manufacturer"),
+                Build.BRAND.clean(),
+                Build.MANUFACTURER.clean(),
+            ).joinToString(" ").lowercase(Locale.ROOT)
+
+            val systemVersionProperties = when {
+                vendorIdentity.containsAny("oneplus", "oppo", "oplus", "realme") -> arrayOf(
+                    "ro.build.version.ota",
+                    "ro.build.version.oplusrom",
+                    "ro.build.version.opporom",
+                    "ro.rom.version",
+                    "ro.build.version.incremental",
+                    "ro.build.display.id",
+                )
+
+                vendorIdentity.containsAny("xiaomi", "redmi", "poco") -> arrayOf(
+                    "ro.build.version.incremental",
+                    "ro.build.display.id",
+                )
+
+                else -> arrayOf(
+                    "ro.build.version.incremental",
+                    "ro.build.display.id",
+                )
+            }
+
+            val systemVersion = firstSystemProperty(*systemVersionProperties).ifBlank {
                 Build.VERSION.INCREMENTAL.clean().ifBlank { Build.DISPLAY.clean() }
             }
 
@@ -79,6 +106,9 @@ data class DeviceProfile(
     }
 }
 
+private fun String.containsAny(vararg values: String): Boolean =
+    values.any(::contains)
+
 private fun String?.clean(): String {
     val value = orEmpty().trim()
     return value.takeUnless { it.equals(Build.UNKNOWN, ignoreCase = true) }.orEmpty()
@@ -96,3 +126,4 @@ private fun String.jsonEscape(): String = buildString(length) {
         }
     }
 }
+
