@@ -41,6 +41,7 @@
     <string name="github">GitHub</string>
     <string name="github_link_not_configured">GitHub link is not configured yet.</string>
     <string name="announcement_title">Announcement</string>
+    <string name="announcement_loading">Loading announcement…</string>
     <string name="announcement_version_label">Server version</string>
     <string name="announcement_author_label">Author</string>
     <string name="local_version_label">Local version</string>

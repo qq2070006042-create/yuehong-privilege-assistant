@@ -41,6 +41,7 @@
     <string name="github">GitHub</string>
     <string name="github_link_not_configured">GitHub 链接暂未配置。</string>
     <string name="announcement_title">公告</string>
+    <string name="announcement_loading">正在加载公告…</string>
     <string name="announcement_version_label">服务器版本</string>
     <string name="announcement_author_label">作者</string>
     <string name="local_version_label">本地版本</string>

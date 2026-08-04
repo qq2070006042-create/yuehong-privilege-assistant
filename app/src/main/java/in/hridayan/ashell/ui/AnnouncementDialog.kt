@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -23,23 +24,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import `in`.hridayan.ashell.R
 import `in`.hridayan.ashell.shell.AnnouncementResult
 
-// 首次启动公告弹窗：含版本验证
-// - 版本匹配或端点未配置/失败：显示版本号/作者/公告，确定按钮关闭
-// - 版本不匹配：标题改为"需要更新"，禁止取消（仅"立即更新"+"退出应用"）
+// 首次启动公告页面：加载并确认后才允许进入本地 ADB 页面。
+// - 版本匹配或端点未配置/失败：显示版本号/作者/公告，确定按钮继续
+// - 版本不匹配：标题改为"需要更新"，仅允许跳转更新页或退出应用
 @Composable
-fun AnnouncementDialog(
-    result: AnnouncementResult?,
+fun AnnouncementScreen(
+    result: AnnouncementResult,
     localVersion: String,
-    onDismiss: () -> Unit,
+    onContinue: () -> Unit,
     onExit: () -> Unit,
 ) {
-    if (result == null) return
-
     // 服务器返回优先；端点未配置 / 失败时退回本地字符串
     val version: String
     val author: String
@@ -65,103 +62,94 @@ fun AnnouncementDialog(
 
     val context = LocalContext.current
 
-    Dialog(
-        onDismissRequest = {
-            // 版本不匹配时禁止通过点击外部或返回键取消
-            if (!needUpdate) onDismiss()
-        },
-        properties = DialogProperties(
-            dismissOnBackPress = !needUpdate,
-            dismissOnClickOutside = !needUpdate,
-        ),
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.surface,
     ) {
-        Surface(
-            modifier = Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.extraLarge,
-            color = MaterialTheme.colorScheme.surfaceContainer,
-            tonalElevation = 8.dp,
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Column(
+            Text(
+                text = stringResource(
+                    if (needUpdate) R.string.update_required_title
+                    else R.string.announcement_title,
+                ),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = if (needUpdate) MaterialTheme.colorScheme.error
+                else MaterialTheme.colorScheme.onSurface,
+            )
+            HorizontalDivider()
+
+            InfoLine(stringResource(R.string.announcement_version_label), version)
+            InfoLine(stringResource(R.string.announcement_author_label), author)
+
+            if (needUpdate) {
+                InfoLine(
+                    stringResource(R.string.local_version_label),
+                    localVersion,
+                )
+            }
+
+            HorizontalDivider()
+
+            SelectionContainer(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(24.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+                    .weight(1f),
             ) {
                 Text(
-                    text = stringResource(
-                        if (needUpdate) R.string.update_required_title
-                        else R.string.announcement_title,
-                    ),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    color = if (needUpdate) MaterialTheme.colorScheme.error
-                    else MaterialTheme.colorScheme.onSurface,
+                    text = if (needUpdate) {
+                        stringResource(R.string.update_required_message, localVersion, version)
+                    } else {
+                        announcement
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
                 )
-                HorizontalDivider()
+            }
 
-                InfoLine(stringResource(R.string.announcement_version_label), version)
-                InfoLine(stringResource(R.string.announcement_author_label), author)
-
-                if (needUpdate) {
-                    InfoLine(
-                        stringResource(R.string.local_version_label),
-                        localVersion,
-                    )
-                }
-
-                HorizontalDivider()
-
-                SelectionContainer {
-                    Text(
-                        text = if (needUpdate) {
-                            stringResource(R.string.update_required_message, localVersion, version)
-                        } else {
-                            announcement
-                        },
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .verticalScroll(rememberScrollState()),
-                    )
-                }
-
-                if (needUpdate) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+            if (needUpdate) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    OutlinedButton(
+                        modifier = Modifier.weight(1f),
+                        onClick = onExit,
                     ) {
-                        OutlinedButton(
-                            modifier = Modifier.weight(1f),
-                            onClick = onExit,
-                        ) {
-                            Text(stringResource(R.string.exit_app))
-                        }
-                        Button(
-                            modifier = Modifier.weight(1f),
-                            onClick = {
-                                if (UPDATE_URL.isBlank()) {
-                                    Toast.makeText(
-                                        context,
-                                        R.string.update_link_not_configured,
-                                        Toast.LENGTH_LONG,
-                                    ).show()
-                                } else {
-                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(UPDATE_URL))
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                    runCatching { context.startActivity(intent) }
-                                }
-                            },
-                        ) {
-                            Text(stringResource(R.string.update_now))
-                        }
+                        Text(stringResource(R.string.exit_app))
                     }
-                } else {
                     Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = onDismiss,
+                        modifier = Modifier.weight(1f),
+                        onClick = {
+                            if (UPDATE_URL.isBlank()) {
+                                Toast.makeText(
+                                    context,
+                                    R.string.update_link_not_configured,
+                                    Toast.LENGTH_LONG,
+                                ).show()
+                            } else {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(UPDATE_URL))
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                runCatching { context.startActivity(intent) }
+                            }
+                        },
                     ) {
-                        Text(stringResource(R.string.ok))
+                        Text(stringResource(R.string.update_now))
                     }
+                }
+            } else {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = onContinue,
+                ) {
+                    Text(stringResource(R.string.ok))
                 }
             }
         }
