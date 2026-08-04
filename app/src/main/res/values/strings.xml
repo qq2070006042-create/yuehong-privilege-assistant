@@ -42,6 +42,13 @@
     <string name="github_link_not_configured">GitHub link is not configured yet.</string>
     <string name="announcement_title">Announcement</string>
     <string name="announcement_loading">Loading announcement…</string>
+    <string name="announcement_loading_subtitle">Preparing the latest notice before Local ADB starts</string>
+    <string name="announcement_security_hint">Information is retrieved only through the configured secure connection</string>
+    <string name="announcement_badge">IMPORTANT NOTICE</string>
+    <string name="announcement_subtitle">Please review the notice before continuing</string>
+    <string name="announcement_content_label">Notice details</string>
+    <string name="announcement_ready_hint">Secure startup · Confirm to enter Local ADB</string>
+    <string name="announcement_continue">I understand, continue</string>
     <string name="announcement_version_label">Server version</string>
     <string name="announcement_author_label">Author</string>
     <string name="local_version_label">Local version</string>
@@ -49,8 +56,11 @@
     <string name="announcement_author_fallback">YueHong Privilege Assistant</string>
     <string name="announcement_default_text">Welcome to YueHong Privilege Assistant.</string>
     <string name="update_required_title">Update required</string>
+    <string name="update_badge">VERSION UPDATE</string>
+    <string name="update_required_subtitle">Install the latest version before continuing</string>
     <string name="update_required_message">Local version %1$s does not match server version %2$s. Please update to the latest version to continue using this app.</string>
     <string name="update_now">Update now</string>
     <string name="exit_app">Exit</string>
     <string name="update_link_not_configured">Update download link is not configured yet.</string>
 </resources>
+
