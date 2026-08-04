@@ -25,8 +25,16 @@ data class DeviceProfile(
                 "ro.product.marketname",
                 "ro.product.vendor.marketname",
                 "ro.product.odm.marketname",
+                "ro.product.system.marketname",
+                "ro.config.marketing_name",
+                "ro.vendor.oplus.market.name",
+                "ro.oplus.market.name",
+                "ro.vivo.market.name",
+                "ro.vivo.product.model",
                 "ro.product.model",
                 "ro.product.vendor.model",
+                "ro.product.odm.model",
+                "ro.product.system.model",
             ).ifBlank { Build.MODEL.clean() }
 
             val vendorIdentity = listOf(
@@ -46,14 +54,98 @@ data class DeviceProfile(
                     "ro.build.display.id",
                 )
 
-                vendorIdentity.containsAny("xiaomi", "redmi", "poco") -> arrayOf(
+                vendorIdentity.containsAny("xiaomi", "redmi", "poco", "blackshark", "black shark") -> arrayOf(
                     "ro.build.version.incremental",
                     "ro.build.display.id",
                 )
 
-                else -> arrayOf(
+                vendorIdentity.containsAny("vivo", "iqoo", "bbk") -> arrayOf(
+                    "ro.build.version.bbk",
+                    "ro.vivo.os.build.display.id",
+                    "ro.vivo.rom.version",
+                    "ro.vivo.os.version",
                     "ro.build.version.incremental",
                     "ro.build.display.id",
+                )
+
+                vendorIdentity.containsAny("huawei") -> arrayOf(
+                    "ro.huawei.build.display.id",
+                    "ro.build.display.id",
+                    "ro.build.version.incremental",
+                    "ro.build.version.emui",
+                    "hw_sc.build.platform.version",
+                )
+
+                vendorIdentity.containsAny("honor") -> arrayOf(
+                    "ro.build.display.id",
+                    "ro.build.version.magic",
+                    "ro.build.version.incremental",
+                )
+
+                vendorIdentity.containsAny("samsung") -> arrayOf(
+                    "ro.build.PDA",
+                    "ro.build.version.incremental",
+                    "ro.build.display.id",
+                )
+
+                vendorIdentity.containsAny("google", "pixel") -> arrayOf(
+                    "ro.build.id",
+                    "ro.build.display.id",
+                    "ro.build.version.incremental",
+                )
+
+                vendorIdentity.containsAny("motorola", "lenovo", "zuk") -> arrayOf(
+                    "ro.build.version.full",
+                    "ro.build.display.id",
+                    "ro.build.version.incremental",
+                )
+
+                vendorIdentity.containsAny("meizu") -> arrayOf(
+                    "ro.build.display.id",
+                    "ro.build.version.incremental",
+                )
+
+                vendorIdentity.containsAny("nubia", "redmagic", "red magic", "zte") -> arrayOf(
+                    "ro.build.version.ota",
+                    "ro.build.display.id",
+                    "ro.build.version.incremental",
+                    "ro.build.nubia.rom.name",
+                )
+
+                vendorIdentity.containsAny("asus", "rog") -> arrayOf(
+                    "ro.build.version.incremental",
+                    "ro.build.version.asus",
+                    "ro.build.display.id",
+                )
+
+                vendorIdentity.containsAny("sony") -> arrayOf(
+                    "ro.build.display.id",
+                    "ro.build.version.incremental",
+                )
+
+                vendorIdentity.containsAny("nothing") -> arrayOf(
+                    "ro.build.version.ota",
+                    "ro.build.display.id",
+                    "ro.build.version.incremental",
+                )
+
+                vendorIdentity.containsAny("lg", "lge") -> arrayOf(
+                    "ro.lge.swversion",
+                    "ro.build.version.incremental",
+                    "ro.build.display.id",
+                )
+
+                vendorIdentity.containsAny("tecno", "infinix", "itel", "transsion", "nokia", "hmd") -> arrayOf(
+                    "ro.build.display.id",
+                    "ro.build.version.incremental",
+                    "ro.build.id",
+                )
+
+                else -> arrayOf(
+                    "ro.build.version.ota",
+                    "ro.build.version.incremental",
+                    "ro.build.display.id",
+                    "ro.build.id",
                 )
             }
 
