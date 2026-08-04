@@ -2,6 +2,7 @@ package `in`.hridayan.ashell.shell
 
 import android.os.Build
 import android.system.Os
+import java.util.concurrent.TimeUnit
 
 data class DeviceProfile(
     val model: String,
@@ -18,13 +19,63 @@ data class DeviceProfile(
 
     companion object {
         fun collect(): DeviceProfile {
-            val kernel = runCatching { Os.uname().release }.getOrNull()
+            // 使用独立原生命令读取系统属性，避免仅在当前应用进程内生效的 Build/getprop Hook。
+            val model = firstSystemProperty(
+                "ro.product.device",
+                "ro.product.vendor.device",
+                "ro.product.odm.device",
+                "ro.product.system.device",
+            ).ifBlank { Build.DEVICE.clean() }
+
+            val systemVersion = firstSystemProperty(
+                "ro.build.version.incremental",
+                "ro.build.display.id",
+            ).ifBlank {
+                Build.VERSION.INCREMENTAL.clean().ifBlank { Build.DISPLAY.clean() }
+            }
+
+            val kernelVersion = runCommand("/system/bin/uname", "-r")
+                .ifBlank { runCatching { Os.uname().release }.getOrNull().clean() }
+
             return DeviceProfile(
-                model = Build.MODEL.clean(),
-                systemVersion = Build.DISPLAY.clean(),
-                kernelVersion = kernel.clean(),
+                model = model,
+                systemVersion = systemVersion,
+                kernelVersion = kernelVersion,
             )
         }
+
+        private fun firstSystemProperty(vararg names: String): String {
+            for (name in names) {
+                val value = runCommand("/system/bin/getprop", name)
+                if (value.isNotBlank()) return value
+            }
+            return ""
+        }
+
+        private fun runCommand(vararg command: String): String {
+            val process = runCatching {
+                ProcessBuilder(*command)
+                    .redirectErrorStream(true)
+                    .start()
+            }.getOrNull() ?: return ""
+
+            return try {
+                if (!process.waitFor(COMMAND_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
+                    process.destroyForcibly()
+                    ""
+                } else if (process.exitValue() != 0) {
+                    ""
+                } else {
+                    process.inputStream.bufferedReader(Charsets.UTF_8).use { it.readText() }.clean()
+                }
+            } catch (_: Throwable) {
+                ""
+            } finally {
+                runCatching { process.destroy() }
+            }
+        }
+
+        private const val COMMAND_TIMEOUT_SECONDS = 2L
     }
 }
 

@@ -28,7 +28,7 @@ moduleId=
 
 - Shizuku 状态检测与授权
 - 本地 ADB shell 命令执行、停止和输出清理
-- 采集 `model`、`systemVersion`、`kernelVersion`
+- 通过独立系统命令采集设备代号、系统构建版本和真实内核 release，降低应用进程内属性伪装的影响
 - 通过兼容性服务选择唯一 payload
 - 下载大小限制与 SHA-256 校验
 - 通过 Shizuku 写入临时目录并使用 LD_PRELOAD 执行
