@@ -1,14 +1,6 @@
 package `in`.hridayan.ashell.ui
 
 import android.app.Activity
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -16,13 +8,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import `in`.hridayan.ashell.BuildConfig
-import `in`.hridayan.ashell.R
 import `in`.hridayan.ashell.shell.AnnouncementResult
 import `in`.hridayan.ashell.shell.HttpAnnouncementApi
 import `in`.hridayan.ashell.shell.HttpCompatibilityApi
@@ -64,7 +51,7 @@ private fun AnnouncementGate(
 
     val result = announcementResult
     if (result == null) {
-        AnnouncementLoadingPage()
+        AnnouncementLoadingScreen()
     } else {
         AnnouncementScreen(
             result = result,
@@ -72,30 +59,6 @@ private fun AnnouncementGate(
             onContinue = onContinue,
             onExit = onExit,
         )
-    }
-}
-
-@Composable
-private fun AnnouncementLoadingPage() {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.surface,
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center,
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                CircularProgressIndicator()
-                Text(
-                    text = stringResource(R.string.announcement_loading),
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-            }
-        }
     }
 }
 
@@ -122,3 +85,4 @@ private fun LocalAdbContent() {
         escalator = escalator,
     )
 }
+
