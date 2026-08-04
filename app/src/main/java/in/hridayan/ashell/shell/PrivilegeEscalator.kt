@@ -161,6 +161,9 @@ class PrivilegeEscalator(
     // 解析服务器响应 JSON，支持 downloadUrl/download_url 与 sha256/sha_256 字段名
     private fun parsePayload(body: String): PayloadInfo {
         val json = JSONObject(body)
+        if (json.optString("matchMode") != "exact") {
+            throw IOException("Server did not confirm strict exact compatibility matching")
+        }
         val url = json.optString("downloadUrl")
             .takeIf(String::isNotBlank)
             ?: json.optString("download_url")
@@ -325,3 +328,4 @@ class PrivilegeEscalator(
         const val MAX_PAYLOAD_BYTES = 64L * 1024L * 1024L
     }
 }
+
