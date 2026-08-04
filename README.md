@@ -2,7 +2,7 @@
 
 月虹提权助手是基于 [aShellYou](https://github.com/DP-Hridayan/aShellYou) 修改的 Android 应用。本项目不是上游官方版本；原项目作者为 DP Hridayan。
 
-本衍生版本保留 Shizuku 本地 ADB shell，并增加设备信息采集、远程兼容性匹配、payload 下载与 SHA-256 校验、LD_PRELOAD 执行以及 Root 状态检测流程。最近修改日期：2026-08-04。
+本衍生版本保留 Shizuku 本地 ADB shell，并增加设备信息采集、远程兼容性匹配、payload 下载与 SHA-256 校验、LD_PRELOAD 执行以及 Root 状态检测流程。最近修改日期：2026-08-05。
 
 ## 开源许可
 
@@ -28,7 +28,7 @@ moduleId=
 
 - Shizuku 状态检测与授权
 - 本地 ADB shell 命令执行、停止和输出清理
-- 通过独立系统命令采集设备代号、系统构建版本和真实内核 release，降低应用进程内属性伪装的影响
+- 通过独立系统命令采集机型名称、厂商系统版本和真实内核 release，降低应用进程内属性伪装的影响；一加/OPPO/OPlus 优先读取 OTA/ROM 版本，小米/Redmi/POCO 优先读取 incremental
 - 通过兼容性服务选择唯一 payload
 - 下载大小限制与 SHA-256 校验
 - 通过 Shizuku 写入临时目录并使用 LD_PRELOAD 执行
@@ -54,3 +54,4 @@ app/build/outputs/apk/release/月虹提权助手-v8.0.0-release.apk
 ## 安全说明
 
 本项目涉及高权限操作，只应在您拥有或获授权测试的设备上使用。请自行审查服务端响应和 payload 来源；公开源码不提供任何 payload，也不保证特定设备或内核可用。
+
