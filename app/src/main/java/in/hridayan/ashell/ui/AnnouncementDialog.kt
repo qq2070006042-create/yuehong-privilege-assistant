@@ -168,8 +168,8 @@ fun AnnouncementDialog(
     }
 }
 
-// 更新包下载链接，暂时留空；填入后"立即更新"会打开浏览器跳转
-private const val UPDATE_URL = ""
+// 公告版本不一致时，“立即更新”跳转到项目更新主页
+private const val UPDATE_URL = "https://yhyun.asia/"
 
 @Composable
 private fun InfoLine(label: String, value: String) {
