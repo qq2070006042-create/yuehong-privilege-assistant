@@ -62,6 +62,7 @@ class ShizukuShellController : AutoCloseable {
                 permissionRequestInFlight = false
                 if (result == PackageManager.PERMISSION_GRANTED) {
                     status = ShizukuStatus.Granted
+                    permissionRequiredNotice = false
                     val action = pendingPermissionAction
                     clearPendingPermissionActions()
                     action?.invoke()
@@ -93,13 +94,17 @@ class ShizukuShellController : AutoCloseable {
                 else -> ShizukuStatus.NeedsPermission
             }
         }.getOrDefault(ShizukuStatus.Unavailable)
-        postToMain { status = next }
+        postToMain {
+            status = next
+            if (next == ShizukuStatus.Granted) permissionRequiredNotice = false
+        }
     }
 
     fun requestPermission() {
         if (hasPermissionNow()) {
             permissionRequestInFlight = false
             status = ShizukuStatus.Granted
+            permissionRequiredNotice = false
             val action = pendingPermissionAction
             clearPendingPermissionActions()
             action?.invoke()

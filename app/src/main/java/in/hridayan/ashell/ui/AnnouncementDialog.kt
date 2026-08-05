@@ -3,6 +3,7 @@ package `in`.hridayan.ashell.ui
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -104,13 +105,16 @@ fun AnnouncementScreen(
                 .padding(horizontal = 20.dp, vertical = 18.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            JourneyProgress(currentStep = 1)
+            Spacer(Modifier.height(14.dp))
             BrandHeader(accent = accent)
-            Spacer(Modifier.height(18.dp))
+            Spacer(Modifier.height(14.dp))
 
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f),
+                    .weight(1f)
+                    .animateContentSize(),
                 shape = RoundedCornerShape(28.dp),
                 colors = CardDefaults.cardColors(containerColor = colors.surface),
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
@@ -277,11 +281,8 @@ fun AnnouncementScreen(
                     }
                 }
             } else {
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(18.dp),
+                MotionButton(
+                    modifier = Modifier.fillMaxWidth(),
                     onClick = onContinue,
                 ) {
                     Text(
@@ -318,6 +319,7 @@ fun AnnouncementLoadingScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(18.dp),
         ) {
+            JourneyProgress(currentStep = 1)
             BrandMark(accent = colors.primary)
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -393,15 +395,16 @@ private fun BrandHeader(accent: Color) {
 }
 
 @Composable
-private fun BrandMark(
+internal fun BrandMark(
     accent: Color,
+    modifier: Modifier = Modifier,
     compact: Boolean = false,
 ) {
     val markSize = if (compact) 66.dp else 86.dp
     val canvasSize = if (compact) 42.dp else 54.dp
     val cutout = MaterialTheme.colorScheme.surface
     Surface(
-        modifier = Modifier.size(markSize),
+        modifier = modifier.size(markSize),
         shape = CircleShape,
         color = accent.copy(alpha = 0.13f),
     ) {
@@ -466,4 +469,3 @@ private fun InfoTile(
 
 // 公告版本不一致时，“立即更新”跳转到项目更新主页
 private const val UPDATE_URL = "https://yhyun.asia/"
-
