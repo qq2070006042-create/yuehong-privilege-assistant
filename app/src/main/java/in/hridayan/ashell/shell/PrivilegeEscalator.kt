@@ -7,10 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import org.json.JSONObject
 import rikka.shizuku.Shizuku
-import java.io.ByteArrayOutputStream
 import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -20,21 +17,23 @@ enum class EscalationStage {
     CheckingPermission,
     CollectingDeviceInfo,
     ReportingToServer,
-    DownloadingPayload,
-    VerifyingChecksum,
+    ValidatingCommand,
     ExecutingPayload,
     CheckingRoot,
+    ActivatingKernelSu,
     Done,
 }
 
 // 提权结果
 sealed interface EscalationResult {
     data object Idle : EscalationResult
-    data class Success(val output: String) : EscalationResult
+    data class RootConfirmed(val output: String, val suPath: String) : EscalationResult
+    data class KernelSuActivated(val output: String) : EscalationResult
+    data class KernelSuActivationFailure(val reason: String) : EscalationResult
     data class Failure(val stage: EscalationStage, val reason: String) : EscalationResult
 }
 
-// 提权编排器：串联 Shizuku权限检查、设备信息上报、payload 下载校验、LD_PRELOAD 执行、root 检测
+// 提权编排器：串联 Shizuku权限检查、设备信息上报、命令校验、命令执行、结果检测
 class PrivilegeEscalator(
     private val shell: ShizukuShellController,
     private val compatibilityApi: CompatibilityApi,
@@ -64,6 +63,16 @@ class PrivilegeEscalator(
         resetState()
     }
 
+    fun activateKernelSu() {
+        mainHandler.post {
+            val rootResult = result as? EscalationResult.RootConfirmed ?: return@post
+            if (stage != EscalationStage.Done) return@post
+            stage = EscalationStage.ActivatingKernelSu
+            result = EscalationResult.Idle
+            executor.execute { runKernelSuActivation(rootResult.suPath) }
+        }
+    }
+
     private fun resetState() {
         mainHandler.post {
             stage = EscalationStage.Idle
@@ -72,7 +81,7 @@ class PrivilegeEscalator(
     }
 
     // ShizukuShellController 会显示专用权限提示；这里结束流程但不再生成通用失败结果，
-    // 避免“需要 Shizuku 权限”和“提权失败”两个弹窗同时出现。
+    // 避免"需要 Shizuku 权限"和"提权失败"两个弹窗同时出现。
     private fun cancelForMissingPermission() {
         resetState()
     }
@@ -84,46 +93,57 @@ class PrivilegeEscalator(
             val profile = DeviceProfile.collect()
             log("model=${profile.model}, system=${profile.systemVersion}, kernel=${profile.kernelVersion}")
 
-            // 2. 上报到服务器，拿到下载直链和 sha-256
+            // 2. 上报到服务器，拿服务端下发的提权命令
             updateStage(EscalationStage.ReportingToServer)
             val payload = reportProfile(profile)
-            log("server returned downloadUrl and sha256")
+            log("server returned payloadCommand for payloadId=${payload.payloadId}")
 
-            // 3. 下载 payload（提权 .so 共享库）到 /data/local/tmp/preload.so
-            //    .so 通过 LD_PRELOAD 注入宿主进程，其 constructor 执行提权代码
-            //    （constructor 在用户态运行，可触发内核系统调用利用 CVE-2026-43499 等 LPE 漏洞）。
-            updateStage(EscalationStage.DownloadingPayload)
-            val bytes = downloadToBytes(payload.downloadUrl, payload.size)
-            log("downloaded ${bytes.size} bytes")
-            writePayloadViaShell(TARGET_PATH, bytes)
-            log("payload written to $TARGET_PATH")
+            // 3. 客户端二次校验命令格式（与服务端校验保持一致）
+            updateStage(EscalationStage.ValidatingCommand)
+            val validatedCommand = validateCommand(payload.command)
+            if (validatedCommand.isEmpty()) {
+                fail(EscalationStage.ValidatingCommand, "server returned invalid payloadCommand format")
+                return
+            }
+            val validatedSuPath = validateSuPath(payload.suPath)
+            if (validatedSuPath.isEmpty()) {
+                fail(EscalationStage.ValidatingCommand, "server returned invalid suPath")
+                return
+            }
+            log("payloadCommand validated as a single device-specific shell command")
+            log("su path validated: $validatedSuPath")
 
-            // 4. 校验 sha-256
-            updateStage(EscalationStage.VerifyingChecksum)
-            val actualSha = computeSha256(TARGET_PATH)
-            log("actual sha256=$actualSha")
-            if (!actualSha.equals(payload.sha256, ignoreCase = true)) {
-                fail(EscalationStage.VerifyingChecksum, "sha256 mismatch: expected=${payload.sha256}, actual=$actualSha")
+            // 4. 通过 Shizuku shell 执行服务器返回的设备专属提权命令。
+            //    此时不能要求 su 已经可用，因为该命令本身负责完成提权。
+            updateStage(EscalationStage.ExecutingPayload)
+            val execution = executeCommand(validatedCommand)
+            log("server command output: ${execution.output.trim()}")
+            log("server command exit code=${execution.exitCode}")
+            if (execution.exitCode != 0) {
+                fail(EscalationStage.ExecutingPayload, "server command exited with code ${execution.exitCode}")
                 return
             }
 
-            // 5. 执行 LD_PRELOAD=/data/local/tmp/preload.so /system/bin/id
-            //    .so 被加载后 constructor 完成提权，id 以 root 运行输出 uid=0(root)。
-            updateStage(EscalationStage.ExecutingPayload)
-            val output = executePreload(TARGET_PATH)
-            log("payload output: ${output.trim()}")
-
-            // 6. 检测是否提权成功
+            // 5. 不能只相信提权命令的 exit code；通过 su 执行 id，并且必须看到 uid=0。
             updateStage(EscalationStage.CheckingRoot)
-            val isRoot = output.contains("uid=0(root)") || output.startsWith("uid=0 ")
+            val rootCheck = executeSuCommand(validatedSuPath, ROOT_CHECK_INNER_COMMAND)
+            val rootOutput = rootCheck.output.trim()
+            val isRoot = rootCheck.exitCode == 0 && ROOT_UID_PATTERN.containsMatchIn(rootOutput)
+            log("root check output: $rootOutput")
             log("root detected=$isRoot")
 
             updateStage(EscalationStage.Done)
             mainHandler.post {
                 result = if (isRoot) {
-                    EscalationResult.Success(output.trim())
+                    EscalationResult.RootConfirmed(
+                        execution.output.trim().ifBlank { rootOutput },
+                        validatedSuPath,
+                    )
                 } else {
-                    EscalationResult.Failure(EscalationStage.CheckingRoot, "uid=0(root) not found in output")
+                    EscalationResult.Failure(
+                        EscalationStage.CheckingRoot,
+                        "uid=0 was not confirmed after server command (exit=${rootCheck.exitCode})",
+                    )
                 }
             }
         } catch (error: Throwable) {
@@ -132,7 +152,99 @@ class PrivilegeEscalator(
         }
     }
 
-    // 把设备信息 POST 到兼容性服务器，解析返回 JSON 中的 downloadUrl 和 sha256
+    private fun runKernelSuActivation(suPath: String) {
+        val outputs = mutableListOf<String>()
+        var failure: Throwable? = null
+        var airplaneModeTouched = false
+        try {
+            runRequiredCustomSuStep("KernelSU late-load", suPath, KERNEL_SU_LATE_LOAD_INNER_COMMAND, outputs)
+            // late-load 成功后由 KernelSU 接管，后续命令使用 PATH 中的 KernelSU su。
+            runRequiredKernelSuStep("SELinux load_policy", KERNEL_SU_LOAD_POLICY_INNER_COMMAND, outputs)
+
+            // 飞行模式必须逐步执行，不能用 ;/&& 拼成一条命令；finally 会无条件尝试关闭。
+            airplaneModeTouched = true
+            runRequiredKernelSuStep("airplane mode setting on", AIRPLANE_MODE_SETTING_ON_INNER_COMMAND, outputs)
+            runRequiredKernelSuStep("airplane mode broadcast on", AIRPLANE_MODE_BROADCAST_ON_INNER_COMMAND, outputs)
+            Thread.sleep(AIRPLANE_MODE_DURATION_MS)
+        } catch (error: Throwable) {
+            failure = error
+            if (error is InterruptedException) Thread.currentThread().interrupt()
+        } finally {
+            if (airplaneModeTouched) {
+                val offErrors = mutableListOf<String>()
+                listOf(
+                    "airplane mode setting off" to AIRPLANE_MODE_SETTING_OFF_INNER_COMMAND,
+                    "airplane mode broadcast off" to AIRPLANE_MODE_BROADCAST_OFF_INNER_COMMAND,
+                ).forEach { (label, innerCommand) ->
+                    runCatching { executeKernelSuCommand(innerCommand) }
+                        .onSuccess { execution ->
+                            log("$label exit code=${execution.exitCode}")
+                            if (execution.output.isNotBlank()) outputs += execution.output.trim()
+                            if (execution.exitCode != 0) offErrors += "$label exited with code ${execution.exitCode}"
+                        }
+                        .onFailure { error -> offErrors += "$label failed: ${error.message ?: error.javaClass.simpleName}" }
+                }
+                if (offErrors.isNotEmpty()) {
+                    val offFailure = IOException(offErrors.joinToString("; "))
+                    if (failure == null) failure = offFailure
+                    else shell.appendOutput("[飞行模式恢复失败] ${offFailure.message}", isError = true)
+                }
+            }
+        }
+
+        val activationFailure = failure
+        if (activationFailure != null) {
+            val reason = activationFailure.message?.takeIf(String::isNotBlank)
+                ?: activationFailure.javaClass.simpleName
+            shell.appendOutput("[KernelSU 激活失败] $reason", isError = true)
+            mainHandler.post {
+                stage = EscalationStage.Done
+                result = EscalationResult.KernelSuActivationFailure(reason)
+            }
+        } else {
+            mainHandler.post {
+                stage = EscalationStage.Done
+                result = EscalationResult.KernelSuActivated(outputs.joinToString("\n"))
+            }
+        }
+    }
+
+    private fun runRequiredCustomSuStep(
+        label: String,
+        suPath: String,
+        innerCommand: String,
+        outputs: MutableList<String>,
+    ) {
+        log("running $label")
+        recordRequiredStep(label, executeSuCommand(suPath, innerCommand), outputs)
+    }
+
+    private fun runRequiredKernelSuStep(
+        label: String,
+        innerCommand: String,
+        outputs: MutableList<String>,
+    ) {
+        log("running $label")
+        recordRequiredStep(label, executeKernelSuCommand(innerCommand), outputs)
+    }
+
+    private fun recordRequiredStep(
+        label: String,
+        execution: CommandExecution,
+        outputs: MutableList<String>,
+    ) {
+        log("$label exit code=${execution.exitCode}")
+        if (execution.output.isNotBlank()) {
+            val output = execution.output.trim()
+            outputs += output
+            log("$label output: $output")
+        }
+        if (execution.exitCode != 0) {
+            throw IOException("$label exited with code ${execution.exitCode}")
+        }
+    }
+
+    // 把设备信息 POST 到兼容性服务器，解析返回 JSON 中的 payloadCommand
     private fun reportProfile(profile: DeviceProfile): PayloadInfo {
         val response = synchronousCheck(profile)
         return when (response) {
@@ -158,138 +270,82 @@ class PrivilegeEscalator(
         return captured
     }
 
-    // 解析服务器响应 JSON，支持 downloadUrl/download_url 与 sha256/sha_256 字段名
+    // 解析服务器响应 JSON，提取 payloadCommand 与 payloadId
+    // 服务端必须返回 matchMode=exact 且非空的 payloadCommand
     private fun parsePayload(body: String): PayloadInfo {
         val json = JSONObject(body)
         if (json.optString("matchMode") != "exact") {
             throw IOException("Server did not confirm strict exact compatibility matching")
         }
-        val url = json.optString("downloadUrl")
+        val command = json.optString("payloadCommand")
             .takeIf(String::isNotBlank)
-            ?: json.optString("download_url")
-            .takeIf(String::isNotBlank)
-            ?: throw IOException("Server response missing downloadUrl")
-        val sha = json.optString("sha256")
-            .takeIf(String::isNotBlank)
-            ?: json.optString("sha_256")
-            .takeIf(String::isNotBlank)
-            ?: json.optString("sha256sum")
+            ?: json.optString("payload_command")
                 .takeIf(String::isNotBlank)
-            ?: throw IOException("Server response missing sha256")
-        val normalizedSha = sha.lowercase()
-        if (!normalizedSha.matches(Regex("^[a-f0-9]{64}$"))) {
-            throw IOException("Server response contains invalid sha256")
-        }
-        val size = json.optLong("size", 0L).coerceAtLeast(0L)
-        if (size > MAX_PAYLOAD_BYTES) {
-            throw IOException("Server payload exceeds size limit")
-        }
-        return PayloadInfo(url, normalizedSha, size)
+            ?: throw IOException("Server response missing payloadCommand")
+        val payloadId = json.optString("payloadId")
+            .takeIf(String::isNotBlank)
+            ?: json.optString("payload_id")
+                .takeIf(String::isNotBlank)
+            ?: "unknown"
+        val suPath = json.optString("suPath")
+            .takeIf(String::isNotBlank)
+            ?: json.optString("su_path")
+                .takeIf(String::isNotBlank)
+            ?: json.optString("ashell_su_path")
+                .takeIf(String::isNotBlank)
+            ?: throw IOException("Server response missing suPath")
+        return PayloadInfo(command, payloadId, suPath)
     }
 
-    // 用应用本身的 HttpURLConnection 下载 payload 字节流
-    private fun downloadToBytes(url: String, expectedSize: Long): ByteArray {
-        val parsed = URL(url)
-        require(parsed.protocol.equals("https", ignoreCase = true)) {
-            "Payload download URL must use HTTPS"
-        }
-        val connection = parsed.openConnection() as HttpURLConnection
-        return try {
-            connection.requestMethod = "GET"
-            connection.connectTimeout = DOWNLOAD_TIMEOUT_MS
-            connection.readTimeout = DOWNLOAD_TIMEOUT_MS
-            connection.instanceFollowRedirects = true
-            val code = connection.responseCode
-            if (code !in 200..299) {
-                val error = connection.errorStream
-                    ?.bufferedReader(Charsets.UTF_8)
-                    ?.use { it.readText().take(512) }
-                    .orEmpty()
-                throw IOException(
-                    "Payload download failed: HTTP $code${error.takeIf(String::isNotBlank)?.let { ": $it" }.orEmpty()}",
-                )
-            }
-            val contentLength = connection.contentLengthLong
-            if (contentLength > MAX_PAYLOAD_BYTES ||
-                (expectedSize > 0L && contentLength > 0L && contentLength != expectedSize)) {
-                throw IOException("Payload Content-Length is invalid")
-            }
-            val output = ByteArrayOutputStream(
-                contentLength.takeIf { it in 1..MAX_PAYLOAD_BYTES }?.toInt() ?: DEFAULT_BUFFER_SIZE,
-            )
-            connection.inputStream.use { input ->
-                val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-                var total = 0L
-                while (true) {
-                    val read = input.read(buffer)
-                    if (read < 0) break
-                    total += read
-                    if (total > MAX_PAYLOAD_BYTES) {
-                        throw IOException("Payload exceeds size limit")
-                    }
-                    output.write(buffer, 0, read)
-                }
-            }
-            output.toByteArray().also { bytes ->
-                if (expectedSize > 0L && bytes.size.toLong() != expectedSize) {
-                    throw IOException("Payload size mismatch: expected=$expectedSize, actual=${bytes.size}")
-                }
-            }
-        } finally {
-            connection.disconnect()
-        }
+    // 与服务端使用相同规则：单条设备专属 shell 命令、UTF-8 最多 1024 字节，
+    // 禁止 NUL、分号、&、|| 或换行；允许单个管道、重定向、引号及命令替换。
+    private fun validateCommand(command: String): String {
+        val cmd = command.trim()
+        if (cmd.isEmpty() || cmd.toByteArray(Charsets.UTF_8).size > MAX_COMMAND_BYTES) return ""
+        if (cmd.indexOf('\u0000') >= 0 || FORBIDDEN_COMMAND_PATTERN.containsMatchIn(cmd)) return ""
+        return cmd
     }
 
-    // 通过 Shizuku 执行 cat > targetPath 把字节流通过 stdin 灌入
-    // shell uid 可写 /data/local/tmp；.so 通过 LD_PRELOAD 加载只需读权限，无需 chmod
+    private fun validateSuPath(value: String): String {
+        val path = value.trim()
+        if (path.isEmpty() || path.toByteArray(Charsets.UTF_8).size > MAX_SU_PATH_BYTES) return ""
+        if (!SU_PATH_PATTERN.matches(path)) return ""
+        if (path.split('/').any { it == "." || it == ".." }) return ""
+        return path
+    }
+
+    // 通过 Shizuku shell 执行命令，合并 stdout/stderr，并把输出和退出码作为同一个结果返回。
     @Suppress("DEPRECATION")
-    private fun writePayloadViaShell(targetPath: String, bytes: ByteArray) {
-        val process = Shizuku.newProcess(
-            arrayOf("sh", "-c", "cat > '$targetPath'"),
-            null,
-            "/",
-        )
-        try {
-            process.outputStream.use { out ->
-                out.write(bytes)
-                out.flush()
-            }
-            val exit = process.waitFor()
-            if (exit != 0) {
-                val err = process.errorStream?.bufferedReader()?.use { it.readText() }?.trim().orEmpty()
-                throw IOException("cat exited with $exit${err.takeIf(String::isNotBlank)?.let { ": $it" }.orEmpty()}")
-            }
-        } finally {
-            runCatching { process.destroy() }
-        }
-    }
-
-    // 通过 Shizuku 执行 sha256sum，取输出前 64 个十六进制字符
-    @Suppress("DEPRECATION")
-    private fun computeSha256(filePath: String): String {
-        val process = Shizuku.newProcess(
-            arrayOf("sh", "-c", "sha256sum '$filePath' 2>/dev/null"),
-            null,
-            "/",
-        )
-        return try {
-            val out = process.inputStream.bufferedReader().use { it.readText() }.trim()
-            process.waitFor()
-            out.substringBefore(' ').lowercase().take(SHA256_HEX_LENGTH)
-        } finally {
-            runCatching { process.destroy() }
-        }
-    }
-
-    // 通过 Shizuku 执行 LD_PRELOAD=payload /system/bin/id，返回合并后的 stdout/stderr
-    @Suppress("DEPRECATION")
-    private fun executePreload(payloadPath: String): String {
-        val command = "LD_PRELOAD='$payloadPath' /system/bin/id 2>&1"
-        val process = Shizuku.newProcess(arrayOf("sh", "-c", command), null, "/")
+    private fun executeCommand(command: String): CommandExecution {
+        val wrappedCommand = "$command 2>&1"
+        val process = Shizuku.newProcess(arrayOf("sh", "-c", wrappedCommand), null, "/")
         return try {
             val out = process.inputStream.bufferedReader().use { it.readText() }
-            process.waitFor()
-            out
+            CommandExecution(out, process.waitFor())
+        } finally {
+            runCatching { process.destroy() }
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun executeSuCommand(suPath: String, innerCommand: String): CommandExecution {
+        require(validateSuPath(suPath) == suPath) { "Invalid su path" }
+        return executeProcess(arrayOf(suPath, "-c", innerCommand))
+    }
+
+    private fun executeKernelSuCommand(innerCommand: String): CommandExecution =
+        executeProcess(arrayOf("su", "-c", innerCommand))
+
+    @Suppress("DEPRECATION")
+    private fun executeProcess(arguments: Array<String>): CommandExecution {
+        val process = Shizuku.newProcess(arguments, null, "/")
+        return try {
+            val stdout = process.inputStream.bufferedReader().use { it.readText() }
+            val stderr = process.errorStream.bufferedReader().use { it.readText() }
+            val output = listOf(stdout, stderr)
+                .filter(String::isNotBlank)
+                .joinToString("\n")
+            CommandExecution(output, process.waitFor())
         } finally {
             runCatching { process.destroy() }
         }
@@ -316,16 +372,33 @@ class PrivilegeEscalator(
     }
 
     private data class PayloadInfo(
-        val downloadUrl: String,
-        val sha256: String,
-        val size: Long,
+        val command: String,
+        val payloadId: String,
+        val suPath: String,
+    )
+
+    private data class CommandExecution(
+        val output: String,
+        val exitCode: Int,
     )
 
     private companion object {
-        const val TARGET_PATH = "/data/local/tmp/preload.so"
-        const val DOWNLOAD_TIMEOUT_MS = 60_000
-        const val SHA256_HEX_LENGTH = 64
-        const val MAX_PAYLOAD_BYTES = 64L * 1024L * 1024L
+        val FORBIDDEN_COMMAND_PATTERN = Regex("[;\\r\\n&]|\\|\\|")
+        val SU_PATH_PATTERN = Regex("^/(?:[A-Za-z0-9_+@.-]+/)*[A-Za-z0-9_+@.-]+$")
+        val ROOT_UID_PATTERN = Regex("(?:^|\\s)uid=0(?:\\(root\\))?(?:\\s|\\z)")
+        const val MAX_COMMAND_BYTES = 1024
+        const val MAX_SU_PATH_BYTES = 256
+        const val ROOT_CHECK_INNER_COMMAND = "id"
+        const val KERNEL_SU_LATE_LOAD_INNER_COMMAND =
+            "\$(find /data/app -name libksud.so | grep me.weishu.kernelsu | head -n 1) " +
+                "late-load --allow-shell --package-name me.weishu.kernelsu"
+        const val KERNEL_SU_LOAD_POLICY_INNER_COMMAND = "load_policy /sys/fs/selinux/policy"
+        const val AIRPLANE_MODE_SETTING_ON_INNER_COMMAND = "settings put global airplane_mode_on 1"
+        const val AIRPLANE_MODE_BROADCAST_ON_INNER_COMMAND =
+            "am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true"
+        const val AIRPLANE_MODE_SETTING_OFF_INNER_COMMAND = "settings put global airplane_mode_on 0"
+        const val AIRPLANE_MODE_BROADCAST_OFF_INNER_COMMAND =
+            "am broadcast -a android.intent.action.AIRPLANE_MODE --ez state false"
+        const val AIRPLANE_MODE_DURATION_MS = 1_000L
     }
 }
-

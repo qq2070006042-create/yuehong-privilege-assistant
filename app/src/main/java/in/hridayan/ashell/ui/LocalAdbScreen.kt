@@ -260,6 +260,10 @@ fun LocalAdbScreen(
     if (showEscalationResult) {
         EscalationResultDialog(
             result = escalator.result,
+            onActivateKernelSu = {
+                showEscalationResult = false
+                escalator.activateKernelSu()
+            },
             onDismiss = {
                 showEscalationResult = false
                 escalator.reset()
@@ -342,7 +346,10 @@ private fun EscalationCard(
             Text(
                 text = stageText,
                 style = MaterialTheme.typography.bodyMedium,
-                color = if (escalator.result is EscalationResult.Failure) {
+                color = if (
+                    escalator.result is EscalationResult.Failure ||
+                    escalator.result is EscalationResult.KernelSuActivationFailure
+                ) {
                     MaterialTheme.colorScheme.error
                 } else {
                     MaterialTheme.colorScheme.onSurface
@@ -392,32 +399,71 @@ private fun escalationStageLabel(stage: EscalationStage): String = when (stage) 
     EscalationStage.CheckingPermission -> stringResource(R.string.escalation_checking_permission)
     EscalationStage.CollectingDeviceInfo -> stringResource(R.string.escalation_collecting_device_info)
     EscalationStage.ReportingToServer -> stringResource(R.string.escalation_reporting_to_server)
-    EscalationStage.DownloadingPayload -> stringResource(R.string.escalation_downloading_payload)
-    EscalationStage.VerifyingChecksum -> stringResource(R.string.escalation_verifying_checksum)
+    EscalationStage.ValidatingCommand -> stringResource(R.string.escalation_validating_command)
     EscalationStage.ExecutingPayload -> stringResource(R.string.escalation_executing_payload)
     EscalationStage.CheckingRoot -> stringResource(R.string.escalation_checking_root)
+    EscalationStage.ActivatingKernelSu -> stringResource(R.string.escalation_activating_kernelsu)
     EscalationStage.Done -> stringResource(R.string.escalation_done)
 }
 
 @Composable
 private fun EscalationResultDialog(
     result: EscalationResult,
+    onActivateKernelSu: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     when (result) {
-        is EscalationResult.Success -> AlertDialog(
+        is EscalationResult.RootConfirmed -> AlertDialog(
             onDismissRequest = onDismiss,
             title = { Text(stringResource(R.string.escalation_success_title)) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(stringResource(R.string.adb_escalated_to_root))
+                    Text(stringResource(R.string.kernelsu_activation_prompt))
                     if (result.output.isNotBlank()) {
                         SelectionContainer { Text(result.output) }
                     }
                 }
             },
             confirmButton = {
-                TextButton(onClick = onDismiss) { Text(stringResource(R.string.ok)) }
+                TextButton(onClick = onActivateKernelSu) {
+                    Text(stringResource(R.string.activate_kernelsu))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = onDismiss) {
+                    Text(stringResource(R.string.do_not_activate))
+                }
+            },
+        )
+
+        is EscalationResult.KernelSuActivated -> AlertDialog(
+            onDismissRequest = onDismiss,
+            title = { Text(stringResource(R.string.kernelsu_activation_success_title)) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(stringResource(R.string.kernelsu_activation_success_message))
+                    if (result.output.isNotBlank()) {
+                        SelectionContainer { Text(result.output) }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.close)) }
+            },
+        )
+
+        is EscalationResult.KernelSuActivationFailure -> AlertDialog(
+            onDismissRequest = onDismiss,
+            title = { Text(stringResource(R.string.kernelsu_activation_failure_title)) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(stringResource(R.string.kernelsu_activation_failure_message))
+                    SelectionContainer { Text(result.reason) }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.close)) }
             },
         )
 

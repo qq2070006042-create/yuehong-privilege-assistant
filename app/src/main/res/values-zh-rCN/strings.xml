@@ -29,15 +29,22 @@
     <string name="escalation_checking_permission">正在检查 Shizuku 权限…</string>
     <string name="escalation_collecting_device_info">正在获取设备信息…</string>
     <string name="escalation_reporting_to_server">正在将设备信息上报到服务器…</string>
-    <string name="escalation_downloading_payload">正在下载 payload…</string>
-    <string name="escalation_verifying_checksum">正在校验 SHA-256…</string>
-    <string name="escalation_executing_payload">正在通过 LD_PRELOAD 执行 payload…</string>
+    <string name="escalation_validating_command">正在校验服务端命令…</string>
+    <string name="escalation_executing_payload">正在执行服务端命令…</string>
     <string name="escalation_checking_root">正在检测 Root 状态…</string>
+    <string name="escalation_activating_kernelsu">正在激活 KernelSU 越狱模式…</string>
     <string name="escalation_done">提权流程结束。</string>
     <string name="escalation_success_title">提权成功</string>
     <string name="escalation_failure_title">提权失败</string>
     <string name="adb_escalated_to_root">ADB 已提权至 root。</string>
     <string name="adb_escalation_failed">ADB 提权失败。</string>
+    <string name="kernelsu_activation_prompt">已确认 Root 权限。是否立即激活 KernelSU 越狱模式？激活过程会加载 SELinux 策略，并短暂开启飞行模式 1 秒。</string>
+    <string name="activate_kernelsu">激活</string>
+    <string name="do_not_activate">暂不激活</string>
+    <string name="kernelsu_activation_success_title">KernelSU 越狱模式已激活</string>
+    <string name="kernelsu_activation_success_message">KernelSU late-load 和 SELinux 策略加载完成，飞行模式已刷新 1 秒并关闭。</string>
+    <string name="kernelsu_activation_failure_title">KernelSU 激活失败</string>
+    <string name="kernelsu_activation_failure_message">设备提权仍然成功，但 KernelSU 越狱模式未能完成激活。应用已在清理阶段尝试关闭飞行模式。</string>
     <string name="github">GitHub</string>
     <string name="github_link_not_configured">GitHub 链接暂未配置。</string>
     <string name="announcement_title">公告</string>
@@ -63,4 +70,3 @@
     <string name="exit_app">退出应用</string>
     <string name="update_link_not_configured">更新下载链接暂未配置。</string>
 </resources>
-

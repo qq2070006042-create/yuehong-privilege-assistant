@@ -29,15 +29,22 @@
     <string name="escalation_checking_permission">Checking Shizuku permission…</string>
     <string name="escalation_collecting_device_info">Collecting device information…</string>
     <string name="escalation_reporting_to_server">Sending device information to server…</string>
-    <string name="escalation_downloading_payload">Downloading payload…</string>
-    <string name="escalation_verifying_checksum">Verifying SHA-256…</string>
-    <string name="escalation_executing_payload">Executing payload via LD_PRELOAD…</string>
+    <string name="escalation_validating_command">Validating server command…</string>
+    <string name="escalation_executing_payload">Executing server command…</string>
     <string name="escalation_checking_root">Checking Root status…</string>
+    <string name="escalation_activating_kernelsu">Activating KernelSU jailbreak mode…</string>
     <string name="escalation_done">Escalation finished.</string>
     <string name="escalation_success_title">Escalation succeeded</string>
     <string name="escalation_failure_title">Escalation failed</string>
     <string name="adb_escalated_to_root">ADB has been escalated to root.</string>
     <string name="adb_escalation_failed">ADB escalation failed.</string>
+    <string name="kernelsu_activation_prompt">Root has been confirmed. Activate KernelSU jailbreak mode now? Activation loads the SELinux policy and briefly enables airplane mode for one second.</string>
+    <string name="activate_kernelsu">Activate</string>
+    <string name="do_not_activate">Not now</string>
+    <string name="kernelsu_activation_success_title">KernelSU jailbreak mode activated</string>
+    <string name="kernelsu_activation_success_message">KernelSU late-load and the SELinux policy completed. Airplane mode was refreshed for one second and turned off.</string>
+    <string name="kernelsu_activation_failure_title">KernelSU activation failed</string>
+    <string name="kernelsu_activation_failure_message">Root escalation remains successful, but KernelSU jailbreak activation did not complete. The app attempted to turn airplane mode off during cleanup.</string>
     <string name="github">GitHub</string>
     <string name="github_link_not_configured">GitHub link is not configured yet.</string>
     <string name="announcement_title">Announcement</string>
@@ -63,4 +70,3 @@
     <string name="exit_app">Exit</string>
     <string name="update_link_not_configured">Update download link is not configured yet.</string>
 </resources>
-
