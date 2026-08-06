@@ -147,13 +147,13 @@ fun ShizukuPermissionScreen(controller: ShizukuShellController) {
                         Surface(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(16.dp),
-                            color = colors.errorContainer,
+                            color = colors.surfaceContainerHigh,
                         ) {
                             Text(
                                 modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
                                 text = stringResource(R.string.shizuku_permission_denied_inline),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = colors.onErrorContainer,
+                                color = colors.error,
                                 textAlign = TextAlign.Center,
                             )
                         }
@@ -276,7 +276,7 @@ private fun PermissionStatusLabel(status: ShizukuStatus) {
     }
     Surface(
         shape = RoundedCornerShape(14.dp),
-        color = accent.copy(alpha = 0.12f),
+        color = colors.surfaceContainerHigh,
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
@@ -303,14 +303,14 @@ private fun PermissionFeatureRow(
     ) {
         Surface(
             shape = RoundedCornerShape(10.dp),
-            color = MaterialTheme.colorScheme.primaryContainer,
+            color = MaterialTheme.colorScheme.surfaceContainerHigh,
         ) {
             Text(
                 modifier = Modifier.padding(horizontal = 9.dp, vertical = 6.dp),
                 text = index,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = MaterialTheme.colorScheme.primary,
             )
         }
         Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
