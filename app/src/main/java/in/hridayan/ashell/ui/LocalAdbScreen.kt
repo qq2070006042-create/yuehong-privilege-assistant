@@ -206,11 +206,7 @@ private fun LocalAdbHeader(
                 val ready = activeStatus == ShizukuStatus.Granted
                 Surface(
                     shape = CircleShape,
-                    color = if (ready) {
-                        MaterialTheme.colorScheme.primaryContainer
-                    } else {
-                        MaterialTheme.colorScheme.errorContainer
-                    },
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 ) {
                     Text(
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
@@ -219,11 +215,8 @@ private fun LocalAdbHeader(
                         ),
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = if (ready) {
-                            MaterialTheme.colorScheme.onPrimaryContainer
-                        } else {
-                            MaterialTheme.colorScheme.onErrorContainer
-                        },
+                        color = if (ready) MaterialTheme.colorScheme.primary else
+                            MaterialTheme.colorScheme.error,
                     )
                 }
             }
@@ -257,7 +250,7 @@ private fun EscalationCard(
             .fillMaxWidth()
             .animateContentSize(),
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
     ) {
         Column(
             modifier = Modifier
@@ -288,7 +281,7 @@ private fun EscalationCard(
                         )
                     }
                 }
-                Surface(shape = CircleShape, color = accent.copy(alpha = 0.12f)) {
+                Surface(shape = CircleShape, color = MaterialTheme.colorScheme.surfaceContainerHigh) {
                     Text(
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
                         text = stringResource(if (running) R.string.status_running else R.string.status_ready),
@@ -478,7 +471,7 @@ private fun CommandComposer(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
     ) {
         Column(
             modifier = Modifier
