@@ -64,8 +64,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -109,15 +107,7 @@ fun LocalAdbScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    listOf(
-                        MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
-                        MaterialTheme.colorScheme.surface,
-                        MaterialTheme.colorScheme.surfaceContainerLowest,
-                    ),
-                ),
-            )
+            .background(MaterialTheme.colorScheme.surface)
             .windowInsetsPadding(WindowInsets.safeDrawing),
         contentAlignment = Alignment.TopCenter,
     ) {
@@ -129,7 +119,6 @@ fun LocalAdbScreen(
                 .padding(horizontal = 16.dp, vertical = 14.dp),
             verticalArrangement = Arrangement.spacedBy(11.dp),
         ) {
-            JourneyProgress(currentStep = 3)
             LocalAdbHeader(
                 status = controller.status,
                 onDeviceInfo = { showDeviceInfo = true },
@@ -191,11 +180,10 @@ private fun LocalAdbHeader(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 15.dp, end = 8.dp, top = 13.dp, bottom = 13.dp),
+                .padding(horizontal = 16.dp, vertical = 13.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            BrandMark(accent = MaterialTheme.colorScheme.primary, compact = true)
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(
                     text = stringResource(R.string.local_adb),
@@ -434,20 +422,6 @@ private fun TerminalOutputCard(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(6.dp),
                         ) {
-                            Surface(
-                                modifier = Modifier.size(44.dp),
-                                shape = CircleShape,
-                                color = MaterialTheme.colorScheme.primaryContainer,
-                            ) {
-                                Box(contentAlignment = Alignment.Center) {
-                                    Text(
-                                        text = ">_",
-                                        fontFamily = FontFamily.Monospace,
-                                        fontWeight = FontWeight.Bold,
-                                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    )
-                                }
-                            }
                             Text(
                                 text = stringResource(R.string.no_output),
                                 style = MaterialTheme.typography.bodyMedium,

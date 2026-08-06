@@ -3,10 +3,6 @@ package `in`.hridayan.ashell.ui
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -15,7 +11,6 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,7 +27,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
@@ -51,11 +45,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -95,15 +84,7 @@ fun ShizukuPermissionScreen(controller: ShizukuShellController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    listOf(
-                        colors.primary.copy(alpha = 0.2f),
-                        colors.surface,
-                        colors.surfaceContainerLowest,
-                    ),
-                ),
-            )
+            .background(colors.surface)
             .windowInsetsPadding(WindowInsets.safeDrawing),
         contentAlignment = Alignment.TopCenter,
     ) {
@@ -115,10 +96,7 @@ fun ShizukuPermissionScreen(controller: ShizukuShellController) {
                 .padding(horizontal = 22.dp, vertical = 18.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            JourneyProgress(currentStep = 2)
-            Spacer(Modifier.height(24.dp))
-            AnimatedPermissionBrand(status = controller.status)
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(12.dp))
             Text(
                 text = stringResource(R.string.shizuku_page_title),
                 style = MaterialTheme.typography.headlineMedium,
@@ -149,7 +127,7 @@ fun ShizukuPermissionScreen(controller: ShizukuShellController) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
-                    PermissionStatusOrb(status = controller.status)
+                    PermissionStatusLabel(status = controller.status)
                     AnimatedContent(
                         targetState = controller.status,
                         transitionSpec = {
@@ -257,28 +235,6 @@ fun ShizukuPermissionScreen(controller: ShizukuShellController) {
 }
 
 @Composable
-private fun AnimatedPermissionBrand(status: ShizukuStatus) {
-    val transition = rememberInfiniteTransition(label = "permission-brand-pulse")
-    val pulse by transition.animateFloat(
-        initialValue = 0.96f,
-        targetValue = 1.045f,
-        animationSpec = infiniteRepeatable(tween(1_350), RepeatMode.Reverse),
-        label = "permission-brand-scale",
-    )
-    val accent = when (status) {
-        ShizukuStatus.Unavailable -> MaterialTheme.colorScheme.error
-        else -> MaterialTheme.colorScheme.primary
-    }
-    BrandMark(
-        accent = accent,
-        modifier = Modifier.graphicsLayer {
-            scaleX = pulse
-            scaleY = pulse
-        },
-    )
-}
-
-@Composable
 private fun PermissionStatusCopy(status: ShizukuStatus) {
     val title = when (status) {
         ShizukuStatus.Checking -> stringResource(R.string.shizuku_checking_title)
@@ -312,55 +268,23 @@ private fun PermissionStatusCopy(status: ShizukuStatus) {
 }
 
 @Composable
-private fun PermissionStatusOrb(status: ShizukuStatus) {
+private fun PermissionStatusLabel(status: ShizukuStatus) {
     val colors = MaterialTheme.colorScheme
     val accent = when (status) {
         ShizukuStatus.Unavailable -> colors.error
         else -> colors.primary
     }
     Surface(
-        modifier = Modifier.size(76.dp),
-        shape = CircleShape,
+        shape = RoundedCornerShape(14.dp),
         color = accent.copy(alpha = 0.12f),
     ) {
-        Box(contentAlignment = Alignment.Center) {
-            if (status == ShizukuStatus.Checking) {
-                CircularProgressIndicator(modifier = Modifier.size(34.dp), strokeWidth = 3.dp)
-            } else {
-                Canvas(Modifier.size(38.dp)) {
-                    drawCircle(color = accent, radius = size.minDimension / 2f)
-                    if (status == ShizukuStatus.Granted) {
-                        drawLine(
-                            color = Color.White,
-                            start = Offset(size.width * 0.26f, size.height * 0.53f),
-                            end = Offset(size.width * 0.44f, size.height * 0.7f),
-                            strokeWidth = size.width * 0.095f,
-                            cap = StrokeCap.Round,
-                        )
-                        drawLine(
-                            color = Color.White,
-                            start = Offset(size.width * 0.44f, size.height * 0.7f),
-                            end = Offset(size.width * 0.75f, size.height * 0.34f),
-                            strokeWidth = size.width * 0.095f,
-                            cap = StrokeCap.Round,
-                        )
-                    } else {
-                        drawLine(
-                            color = Color.White,
-                            start = Offset(size.width * 0.5f, size.height * 0.25f),
-                            end = Offset(size.width * 0.5f, size.height * 0.58f),
-                            strokeWidth = size.width * 0.09f,
-                            cap = StrokeCap.Round,
-                        )
-                        drawCircle(
-                            color = Color.White,
-                            radius = size.width * 0.05f,
-                            center = Offset(size.width * 0.5f, size.height * 0.75f),
-                        )
-                    }
-                }
-            }
-        }
+        Text(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
+            text = "Shizuku",
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.Bold,
+            color = accent,
+        )
     }
 }
 

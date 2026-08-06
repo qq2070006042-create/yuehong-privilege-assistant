@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,8 +36,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -88,15 +85,7 @@ fun AnnouncementScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    listOf(
-                        accent.copy(alpha = 0.18f),
-                        colors.surface,
-                        colors.surface,
-                    ),
-                ),
-            )
+            .background(colors.surface)
             .windowInsetsPadding(WindowInsets.safeDrawing),
     ) {
         Column(
@@ -105,8 +94,6 @@ fun AnnouncementScreen(
                 .padding(horizontal = 20.dp, vertical = 18.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            JourneyProgress(currentStep = 1)
-            Spacer(Modifier.height(14.dp))
             BrandHeader(accent = accent)
             Spacer(Modifier.height(14.dp))
 
@@ -301,15 +288,7 @@ fun AnnouncementLoadingScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    listOf(
-                        colors.primary.copy(alpha = 0.2f),
-                        colors.surface,
-                        colors.surface,
-                    ),
-                ),
-            )
+            .background(colors.surface)
             .windowInsetsPadding(WindowInsets.safeDrawing)
             .padding(24.dp),
         contentAlignment = Alignment.Center,
@@ -319,8 +298,6 @@ fun AnnouncementLoadingScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(18.dp),
         ) {
-            JourneyProgress(currentStep = 1)
-            BrandMark(accent = colors.primary)
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -378,7 +355,6 @@ private fun BrandHeader(accent: Color) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        BrandMark(accent = accent, compact = true)
         Text(
             text = stringResource(R.string.app_name),
             style = MaterialTheme.typography.titleLarge,
@@ -391,44 +367,6 @@ private fun BrandHeader(accent: Color) {
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
         )
-    }
-}
-
-@Composable
-internal fun BrandMark(
-    accent: Color,
-    modifier: Modifier = Modifier,
-    compact: Boolean = false,
-) {
-    val markSize = if (compact) 66.dp else 86.dp
-    val canvasSize = if (compact) 42.dp else 54.dp
-    val cutout = MaterialTheme.colorScheme.surface
-    Surface(
-        modifier = modifier.size(markSize),
-        shape = CircleShape,
-        color = accent.copy(alpha = 0.13f),
-    ) {
-        Box(contentAlignment = Alignment.Center) {
-            Canvas(Modifier.size(canvasSize)) {
-                val radius = size.minDimension / 2f
-                drawCircle(color = accent, radius = radius)
-                drawCircle(
-                    color = cutout,
-                    radius = radius * 0.68f,
-                    center = Offset(size.width * 0.64f, size.height * 0.35f),
-                )
-                drawCircle(
-                    color = accent,
-                    radius = radius * 0.09f,
-                    center = Offset(size.width * 0.78f, size.height * 0.75f),
-                )
-                drawCircle(
-                    color = accent.copy(alpha = 0.55f),
-                    radius = radius * 0.045f,
-                    center = Offset(size.width * 0.65f, size.height * 0.86f),
-                )
-            }
-        }
     }
 }
 
