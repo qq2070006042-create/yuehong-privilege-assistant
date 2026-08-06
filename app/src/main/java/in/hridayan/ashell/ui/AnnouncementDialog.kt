@@ -79,8 +79,6 @@ fun AnnouncementScreen(
     val context = LocalContext.current
     val colors = MaterialTheme.colorScheme
     val accent = if (needUpdate) colors.error else colors.primary
-    val accentContainer = if (needUpdate) colors.errorContainer else colors.primaryContainer
-    val onAccentContainer = if (needUpdate) colors.onErrorContainer else colors.onPrimaryContainer
 
     Box(
         modifier = Modifier
@@ -114,7 +112,7 @@ fun AnnouncementScreen(
                 ) {
                     Surface(
                         shape = CircleShape,
-                        color = accentContainer,
+                        color = colors.surfaceContainerHigh,
                     ) {
                         Text(
                             text = stringResource(
@@ -124,7 +122,7 @@ fun AnnouncementScreen(
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
-                            color = onAccentContainer,
+                            color = accent,
                         )
                     }
 
@@ -204,7 +202,7 @@ fun AnnouncementScreen(
                             .fillMaxWidth()
                             .weight(1f),
                         shape = RoundedCornerShape(18.dp),
-                        color = accentContainer.copy(alpha = 0.42f),
+                        color = colors.surfaceContainerLow,
                     ) {
                         SelectionContainer {
                             Text(
@@ -380,7 +378,7 @@ private fun InfoTile(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.58f),
+        color = MaterialTheme.colorScheme.surfaceContainer,
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 13.dp, vertical = 11.dp),
