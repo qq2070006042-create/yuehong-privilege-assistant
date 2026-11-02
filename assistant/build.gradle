@@ -1,0 +1,160 @@
+import java.util.Properties
+import java.util.Locale
+
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.compose'
+}
+
+def serverProperties = new Properties()
+def serverPropertiesFile = rootProject.file("server.properties")
+if (serverPropertiesFile.exists()) {
+    serverPropertiesFile.withInputStream { serverProperties.load(it) }
+}
+
+def serverProperty = { String name -> serverProperties.getProperty(name, "").trim() }
+def buildConfigString = { String value ->
+    '"' + value.replace('\\', '\\\\').replace('"', '\\"') + '"'
+}
+
+def dirtyFragVrRoot = file('src/main/jni/vrext')
+def dirtyFragVrBuild = layout.buildDirectory.dir('native/dirtyfrag-vr')
+def dirtyFragVrJniLibs = layout.buildDirectory.dir('generated/dirtyfrag-vr/jniLibs')
+
+android {
+    namespace 'roro.stellar.yuehong'
+
+    defaultConfig {
+        minSdk 28
+
+        buildConfigField 'String', 'APPLICATION_ID', '"roro.stellar.yuehong"'
+        buildConfigField 'int', 'VERSION_CODE', rootProject.ext.yuehongVersionCode.toString()
+        buildConfigField 'String', 'VERSION_NAME', buildConfigString(rootProject.ext.yuehongVersionName.toString())
+        buildConfigField 'String', 'SERVER_COMPATIBILITY_ENDPOINT', buildConfigString(serverProperty('compatibilityEndpoint'))
+        buildConfigField 'String', 'SERVER_MODULE_ID', buildConfigString(serverProperty('moduleId'))
+        buildConfigField 'String', 'SERVER_PROTOCOL_V2_ENDPOINT', buildConfigString(serverProperty('protocolV2Endpoint'))
+        buildConfigField 'String', 'SERVER_PROTOCOL_V2_PUBLIC_KEY', buildConfigString(serverProperty('protocolV2PublicKey'))
+        buildConfigField 'String', 'SERVER_PROTOCOL_V2_KEY_ID', buildConfigString(serverProperty('protocolV2KeyId'))
+        buildConfigField 'String', 'ROM_PROTOCOL_V2_ENDPOINT', buildConfigString(serverProperty('romProtocolV2Endpoint'))
+        buildConfigField 'String', 'ROM_PROTOCOL_V2_PUBLIC_KEY', buildConfigString(serverProperty('romProtocolV2PublicKey'))
+        buildConfigField 'String', 'ROM_PROTOCOL_V2_KEY_ID', buildConfigString(serverProperty('romProtocolV2KeyId'))
+
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+
+    buildFeatures {
+        compose true
+        buildConfig true
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDir(dirtyFragVrJniLibs.get().asFile)
+        }
+    }
+
+    packagingOptions {
+        jniLibs {
+            keepDebugSymbols += ["**/libbs.so", "**/libionstack.so", "**/libksu_*.so"]
+        }
+    }
+
+    kotlin {
+        jvmToolchain(21)
+    }
+}
+
+dependencies {
+    implementation project(':ghostlock-app')
+    implementation project(':api')
+    implementation managerLibs.bundles.kotlinxCoroutines
+    implementation managerLibs.bundles.core
+    implementation platform(managerLibs.composeBom)
+    implementation managerLibs.bundles.composeUi
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.80.2'
+}
+
+def dirtyFragVrLocalProperties = {
+    def properties = new Properties()
+    def propertiesFile = rootProject.file('local.properties')
+    if (propertiesFile.isFile()) propertiesFile.withInputStream { properties.load(it) }
+    properties
+}
+
+def resolveDirtyFragVrNdk = {
+    def properties = dirtyFragVrLocalProperties()
+    def ndkPath = System.getenv('ANDROID_NDK_HOME') ?: System.getenv('ANDROID_NDK_ROOT')
+    if (ndkPath?.trim()) return new File(ndkPath)
+
+    def configuredNdk = properties.getProperty('ndk.dir')
+    if (configuredNdk?.trim()) return new File(configuredNdk)
+
+    def sdkPath = properties.getProperty('sdk.dir') ?: System.getenv('ANDROID_HOME')
+    if (sdkPath?.trim()) {
+        def ndkRoot = new File(sdkPath, 'ndk')
+        def candidates = ndkRoot.listFiles()?.findAll { it.isDirectory() }?.sort { it.name } ?: []
+        if (!candidates.isEmpty()) return candidates.last()
+    }
+    throw new GradleException('Android NDK not found for DirtyFrag VR extractor')
+}
+
+def resolveDirtyFragVrCargo = {
+    def windows = System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')
+    def executable = windows ? 'cargo.exe' : 'cargo'
+    def fromPath = (System.getenv('PATH') ?: '').split(java.util.regex.Pattern.quote(File.pathSeparator))
+            .collect { new File(it, executable) }
+            .find { it.isFile() }
+    if (fromPath) return fromPath.absolutePath
+
+    def rustupCargo = new File(System.getProperty('user.home'), ".cargo/bin/${executable}")
+    rustupCargo.isFile() ? rustupCargo.absolutePath : executable
+}
+
+tasks.register('buildDirtyFragVrExtractor', Exec) {
+    description = 'Build the boot-image and OTA VR offset extractor for arm64 Android.'
+    workingDir dirtyFragVrRoot
+    def output = new File(dirtyFragVrBuild.get().asFile,
+            'aarch64-linux-android/release/libvrext.so')
+    outputs.file(output)
+    inputs.files(fileTree(dirtyFragVrRoot) { include '**/*.rs' },
+            new File(dirtyFragVrRoot, 'Cargo.toml'),
+            new File(dirtyFragVrRoot, 'Cargo.lock'))
+
+    doFirst {
+        def ndk = resolveDirtyFragVrNdk()
+        def osName = System.getProperty('os.name').toLowerCase(Locale.ROOT)
+        def prebuilt = osName.contains('windows') ? 'windows-x86_64' :
+                (osName.contains('mac') ? 'darwin-x86_64' : 'linux-x86_64')
+        def toolchain = new File(ndk,
+                "toolchains/llvm/prebuilt/${prebuilt}/bin")
+        def suffix = osName.contains('windows') ? '.cmd' : ''
+        def clang = new File(toolchain, "aarch64-linux-android33-clang${suffix}")
+        def ar = new File(toolchain, "llvm-ar${osName.contains('windows') ? '.exe' : ''}")
+        if (!clang.isFile() || !ar.isFile()) {
+            throw new GradleException("Android NDK arm64 linker tools missing under ${toolchain}")
+        }
+        commandLine(resolveDirtyFragVrCargo(), 'build', '--release', '--features', 'http',
+                '--target', 'aarch64-linux-android', '--target-dir', dirtyFragVrBuild.get().asFile)
+        environment 'CC_aarch64_linux_android', clang.absolutePath
+        environment 'AR_aarch64_linux_android', ar.absolutePath
+        environment 'CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER', clang.absolutePath
+        environment 'RUSTFLAGS', '-C force-unwind-tables=no -C link-arg=-Wl,--icf=all'
+    }
+}
+
+tasks.register('prepareDirtyFragVrJniLibs', Copy) {
+    description = 'Package the DirtyFrag VR offset extractor for arm64 devices.'
+    dependsOn 'buildDirtyFragVrExtractor'
+    from new File(dirtyFragVrBuild.get().asFile,
+            'aarch64-linux-android/release/libvrext.so')
+    into new File(dirtyFragVrJniLibs.get().asFile, 'arm64-v8a')
+    include 'libvrext.so'
+}
+
+tasks.matching { task ->
+    (task.name.startsWith('merge') && task.name.endsWith('JniLibFolders')) ||
+            (task.name.startsWith('merge') && task.name.endsWith('NativeLibs'))
+}.configureEach {
+    dependsOn 'prepareDirtyFragVrJniLibs'
+}

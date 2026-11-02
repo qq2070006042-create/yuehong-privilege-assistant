@@ -1,0 +1,35 @@
+[package]
+name = "vrext"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "vrext"
+crate-type = ["cdylib"]
+
+[target.'cfg(target_os = "android")'.dependencies]
+jni = "0.21"
+
+[dependencies]
+anyhow = "1"
+serde_json = "1"
+
+[dependencies.ghostlock-extract]
+path = "../../../../../third_party/ghostlock/tools/extract_rs"
+
+[dependencies.payload-extract]
+package = "payload-extract"
+git = "https://github.com/YuKongA/payload_extract_rs"
+rev = "5534f07298d9f366d6a71daf52cb09141ed96a8a"
+default-features = false
+
+[features]
+default = []
+http = ["payload-extract/http-rustls"]
+
+[profile.release]
+opt-level = "z"
+lto = "fat"
+codegen-units = 1
+strip = true
+panic = "abort"

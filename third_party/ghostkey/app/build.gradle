@@ -1,0 +1,118 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.compose'
+}
+
+android {
+    namespace 'com.GhostKey.app'
+    compileSdk 37
+
+    defaultConfig {
+        minSdk 29
+        consumerProguardFiles 'proguard-rules.pro'
+        externalNativeBuild {
+            cmake {
+                arguments '-DANDROID_STL=none'
+                // NDK clang is selected explicitly by the Android toolchain.
+                // Skip CMake's nested cmd.exe compiler-link probe on this host;
+                // the repository build script then compiles and links the actual target.
+                arguments '-DCMAKE_C_COMPILER_FORCED=TRUE'
+                abiFilters 'arm64-v8a'
+            }
+        }
+    }
+
+    buildFeatures {
+        aidl true
+        compose true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    kotlin {
+        jvmToolchain(21)
+    }
+
+    externalNativeBuild {
+        cmake {
+            path 'src/main/cpp/CMakeLists.txt'
+            version '3.22.1+'
+        }
+    }
+
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging true
+        }
+    }
+
+    sourceSets {
+        debug {
+            jniLibs.srcDir(layout.buildDirectory.dir('generated/ghostkey/jniLibs/debug').get().asFile)
+        }
+        release {
+            jniLibs.srcDir(layout.buildDirectory.dir('generated/ghostkey/jniLibs/release').get().asFile)
+        }
+    }
+}
+
+dependencies {
+    implementation project(':ghostlock-app')
+    implementation project(':shizuku-aidl')
+    implementation managerLibs.bundles.core
+    implementation managerLibs.bundles.lifecycle
+    implementation managerLibs.bundles.kotlinxCoroutines
+    implementation platform(managerLibs.composeBom)
+    implementation managerLibs.bundles.composeUi
+    implementation 'androidx.compose.runtime:runtime-saveable'
+    implementation managerLibs.material
+    implementation 'androidx.activity:activity-compose:1.10.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.9.0'
+    implementation('dev.rikka.shizuku:api:13.1.5') {
+        exclude group: 'dev.rikka.shizuku', module: 'aidl'
+    }
+    testImplementation 'junit:junit:4.13.2'
+}
+
+// The upstream CMake target is a PIE executable named libcve98260.so, not a
+// shared JNI library. Stage it into jniLibs so Android extracts it to
+// nativeLibraryDir, where the Shizuku UserService launches it by path.
+['Debug', 'Release'].each { variant ->
+    def capitalized = variant
+    def outputDir = layout.buildDirectory.dir("generated/ghostkey/jniLibs/${variant.toLowerCase()}")
+    def stageTask = tasks.register("stageGhostKey${capitalized}Executable") {
+        dependsOn("externalNativeBuild${capitalized}")
+        outputs.file(outputDir.map { it.file('arm64-v8a/libcve98260.so') })
+        doLast {
+            def cmakeVariant = capitalized == 'Release' ? 'RelWithDebInfo' : 'Debug'
+            def searchRoot = new File(buildDir, "intermediates/cxx/${cmakeVariant}")
+            def candidates = fileTree(searchRoot).matching {
+                include '**/obj/arm64-v8a/libcve98260.so'
+            }.files.findAll { it.isFile() && it.length() > 0L }
+            if (candidates.isEmpty()) {
+                throw new GradleException("GhostKey CMake executable not found under ${searchRoot}")
+            }
+            def source = candidates.max { it.lastModified() }
+            def destination = new File(outputDir.get().asFile, 'arm64-v8a/libcve98260.so')
+            destination.parentFile.mkdirs()
+            destination.bytes = source.bytes
+            if (!destination.setExecutable(true, false)) {
+                logger.warn("Could not mark staged GhostKey executable executable on this host: ${destination}")
+            }
+            logger.lifecycle("Staged GhostKey ${variant} ARM64 executable: ${destination} (${destination.length()} bytes)")
+        }
+    }
+    tasks.matching {
+        it.name == "merge${capitalized}JniLibFolders" || it.name == "merge${capitalized}NativeLibs"
+    }.configureEach {
+        dependsOn(stageTask)
+    }
+}

@@ -1,0 +1,22 @@
+{
+  "schema": "gl5x-integrity/1",
+  "name": "bundled-privilege-payloads",
+  "algo": "sha256",
+  "created_at": 1789205371,
+  "files": [
+    {
+      "path": "libbs.so",
+      "sha256": "8c3410cbc7dce25df3274c0e35d293cb38d7ad2384af7ecc549a3400c50695d9",
+      "size": 176544,
+      "role": "payload-vivo",
+      "required": true
+    },
+    {
+      "path": "libionstack.so",
+      "sha256": "67bedbd7709d40333392e1943cc9314eadf6322f651aa0c67ad6f95edaa2ae94",
+      "size": 154528,
+      "role": "payload-universal",
+      "required": true
+    }
+  ]
+}

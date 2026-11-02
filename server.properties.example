@@ -1,0 +1,10 @@
+# Copy this file to server.properties for a private connected build.
+# Keep server.properties private; it is ignored by Git and source packages.
+compatibilityEndpoint=
+moduleId=
+protocolV2Endpoint=
+protocolV2PublicKey=
+protocolV2KeyId=
+romProtocolV2Endpoint=
+romProtocolV2PublicKey=
+romProtocolV2KeyId=

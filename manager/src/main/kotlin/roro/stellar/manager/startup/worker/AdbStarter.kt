@@ -1,0 +1,124 @@
+package roro.stellar.manager.startup.worker
+
+import android.util.Log
+import kotlinx.coroutines.delay
+import roro.stellar.Stellar
+import roro.stellar.manager.AppConstants
+import roro.stellar.manager.StellarSettings
+import roro.stellar.manager.adb.AdbWirelessHelper
+import roro.stellar.manager.adb.AdbClient
+import roro.stellar.manager.adb.AdbKey
+import roro.stellar.manager.adb.PreferenceAdbKeyStore
+import roro.stellar.manager.startup.command.Starter
+import java.net.InetSocketAddress
+import java.net.Socket
+
+object AdbStarter {
+
+    private const val TAG = AppConstants.TAG
+
+    /**
+     * 连接到 ADB 并执行 starter 命令。
+     * 带指数退避重试，最多 [maxRetries] 次。
+     */
+    suspend fun startAdb(host: String, port: Int, maxRetries: Int = 5): Boolean {
+        val key = AdbKey(PreferenceAdbKeyStore(StellarSettings.getPreferences()), "stellar")
+        var activePort = port
+        val (shouldChange, newPort) = AdbWirelessHelper().shouldChangePort(activePort)
+
+        if (shouldChange && newPort > 0) {
+            for (attempt in 0 until maxRetries) {
+                try {
+                    AdbClient(host, activePort, key).use { client ->
+                        client.connect()
+                        client.tcpip(newPort) { }
+                    }
+                    activePort = newPort
+                    break
+                } catch (_: java.io.EOFException) {
+                    activePort = newPort
+                    break
+                } catch (e: Exception) {
+                    Log.w(TAG, "ADB 端口切换尝试 ${attempt + 1}/$maxRetries 失败", e)
+                    if (attempt < maxRetries - 1) {
+                        delay(1000L * (1 shl attempt))
+                    }
+                }
+            }
+        }
+
+        repeat(maxRetries) { attempt ->
+            try {
+                AdbClient(host, activePort, key).use { client ->
+                    client.connect()
+                    client.shellCommand(Starter.wirelessDebuggingCommand) { /* consume output */ }
+                }
+                return true
+            } catch (_: java.io.EOFException) {
+                // shell stream 关闭是正常的（服务进程已 fork）
+                return true
+            } catch (e: Exception) {
+                Log.w(TAG, "ADB 启动尝试 ${attempt + 1}/$maxRetries 失败", e)
+                if (attempt < maxRetries - 1) {
+                    delay(1000L * (1 shl attempt)) // 1s, 2s, 4s, 8s
+                }
+            }
+        }
+        return false
+    }
+
+    suspend fun prepareTcpip(host: String, wirelessPort: Int, tcpipPort: Int, maxRetries: Int = 5): Boolean {
+        if (tcpipPort !in 1..65535) return false
+
+        val key = AdbKey(PreferenceAdbKeyStore(StellarSettings.getPreferences()), "stellar")
+        repeat(maxRetries) { attempt ->
+            try {
+                AdbClient(host, wirelessPort, key).use { client ->
+                    client.connect()
+                    client.tcpip(tcpipPort) {}
+                }
+                return waitForTcpipPort(host, tcpipPort)
+            } catch (_: java.io.EOFException) {
+                if (waitForTcpipPort(host, tcpipPort)) return true
+            } catch (e: Exception) {
+                Log.w(TAG, "ADB TCP/IP prepare attempt ${attempt + 1}/$maxRetries failed", e)
+            }
+
+            if (attempt < maxRetries - 1) {
+                delay(1000L * (1 shl attempt))
+            }
+        }
+        return false
+    }
+
+    private suspend fun waitForTcpipPort(host: String, port: Int, timeoutMs: Long = 15_000): Boolean {
+        val interval = 500L
+        var elapsed = 0L
+        while (elapsed < timeoutMs) {
+            try {
+                Socket().use { socket ->
+                    socket.connect(InetSocketAddress(host, port), 2000)
+                }
+                return true
+            } catch (_: Exception) {
+                delay(interval)
+                elapsed += interval
+            }
+        }
+        return false
+    }
+
+    /**
+     * 轮询等待 Stellar Binder 可用。
+     */
+    suspend fun waitForBinder(timeoutMs: Long = 15_000): Boolean {
+        val interval = 300L
+        var elapsed = 0L
+        while (elapsed < timeoutMs) {
+            if (Stellar.pingBinder()) return true
+            delay(interval)
+            elapsed += interval
+        }
+        return false
+    }
+}

@@ -1,0 +1,225 @@
+import com.android.build.gradle.internal.tasks.CompileArtProfileTask
+
+import java.nio.file.Paths
+import java.util.Properties
+
+plugins {
+    id('com.android.application')
+    id('org.jetbrains.kotlin.android')
+    id('org.jetbrains.kotlin.plugin.compose')
+    id('com.google.devtools.ksp')
+    id('dev.rikka.tools.refine')
+    id('dev.rikka.tools.autoresconfig')
+}
+android {
+    namespace 'roro.stellar.manager'
+    defaultConfig {
+        applicationId "roro.stellar.yuehong"
+        // Android 10 is the minimum supported platform; newer mode-specific
+        // requirements are handled by the corresponding mode entry points.
+        minSdk 29
+        versionCode rootProject.ext.yuehongVersionCode
+        versionName rootProject.ext.yuehongVersionName
+
+        // 月虹提权助手的运行目标为 64 位 ARM 真机；去除模拟器/32 位重复库。
+        ndk {
+            abiFilters 'arm64-v8a'
+        }
+
+        // 保留默认英文及产品使用的中文资源，移除依赖库中未使用的几十套翻译。
+        resourceConfigurations += ['en', 'zh-rCN', 'zh-rHK', 'zh-rTW']
+
+        externalNativeBuild {
+            cmake {
+                arguments '-DANDROID_STL=none',
+                        '-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY',
+                        '-DCMAKE_C_COMPILER_WORKS=1',
+                        '-DCMAKE_CXX_COMPILER_WORKS=1',
+                        '-DCMAKE_C_COMPILER_FORCED=TRUE',
+                        '-DCMAKE_CXX_COMPILER_FORCED=TRUE'
+                abiFilters 'arm64-v8a'
+            }
+        }
+    }
+
+    buildFeatures {
+        buildConfig true
+        prefab true
+        compose true
+    }
+
+    def signingPropsFile = rootProject.file("keystore.properties")
+    def signingProps = new Properties()
+    if (signingPropsFile.exists()) {
+        signingPropsFile.withInputStream { signingProps.load(it) }
+    }
+    def hasReleaseSigning = [
+            "storeFile",
+            "storePassword",
+            "keyAlias",
+            "keyPassword"
+    ].every { signingProps.getProperty(it)?.trim() } &&
+            rootProject.file(signingProps.getProperty("storeFile", "")).exists()
+
+    project.ext.yuehongHasReleaseSigning = hasReleaseSigning
+
+    signingConfigs {
+        sign {
+            if (hasReleaseSigning) {
+                storeFile rootProject.file(signingProps.getProperty("storeFile"))
+                storePassword signingProps.getProperty("storePassword")
+                keyAlias signingProps.getProperty("keyAlias")
+                keyPassword signingProps.getProperty("keyPassword")
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+        }
+        release {
+            signingConfig hasReleaseSigning ? signingConfigs.sign : signingConfigs.debug
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles 'proguard-rules.pro'
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path 'src/main/jni/CMakeLists.txt'
+            version = "3.22.1+"
+        }
+    }
+
+    packagingOptions {
+        resources {
+            // Bouncy Castle 仅用于 Ed25519/X509；PICNIC 的 1.2 MB 参数表不会被代码收缩器自动移除。
+            excludes += [
+                    '/META-INF/**',
+                    '/org/bouncycastle/pqc/crypto/picnic/**'
+            ]
+        }
+        jniLibs {
+            useLegacyPackaging = true
+            keepDebugSymbols += ["**/libbs.so", "**/libionstack.so", "**/libksu_*.so"]
+        }
+    }
+
+    kotlin {
+        jvmToolchain(21)
+    }
+}
+
+autoResConfig {
+    generatedClassFullName = "roro.stellar.manager.StellarLocales"
+    generateRes = false
+    generatedArrayFirstItem = "SYSTEM"
+    generateLocaleConfig = true
+}
+def collapseReleaseResourceNames = task('collapseReleaseResourceNames').doLast {
+    def aapt2Name = System.getProperty('os.name').toLowerCase().contains('windows') ? 'aapt2.exe' : 'aapt2'
+    def aapt2 = Paths.get(project.android.sdkDirectory.path, 'build-tools', project.android.buildToolsVersion, aapt2Name)
+    def zip = Paths.get(project.buildDir.path, 'intermediates',
+            'optimized_processed_res', 'release', 'optimizeReleaseResources', 'resources-release-optimize.ap_')
+    def optimized = new File("${zip}.opt")
+    def process = new ProcessBuilder(aapt2.toString(), 'optimize', '--collapse-resource-names',
+            '--resources-config-path', 'aapt2-resources.cfg', '-o', optimized.path, zip.toString())
+            .directory(project.projectDir)
+            .inheritIO()
+            .start()
+    def exitCode = process.waitFor()
+    if (exitCode != 0) throw new GradleException("aapt2 optimize failed with exit code ${exitCode}")
+    delete(zip)
+    if (!optimized.renameTo(zip.toFile())) {
+        throw new GradleException("Could not replace optimized resources archive: ${zip}")
+    }
+}
+afterEvaluate {
+    tasks.findByName('optimizeReleaseResources')?.finalizedBy(collapseReleaseResourceNames)
+}
+android.applicationVariants.configureEach { variant ->
+    variant.outputs.configureEach {
+        outputFileName = "月虹提权助手-${variant.versionName}-${variant.name}.apk"
+
+        variant.assembleProvider.get().doLast {
+            def outDir = new File(rootDir, "out")
+            def mappingDir = new File(outDir, "mapping").absolutePath
+            def apkDir = new File(outDir, "apk").absolutePath
+
+            if (variant.getBuildType().isMinifyEnabled()) {
+                copy {
+                    from variant.mappingFileProvider.get()
+                    into mappingDir
+                    rename { String fileName -> "mapping-${variant.versionName}.txt" }
+                }
+                copy {
+                    from outputFile
+                    into apkDir
+                }
+            }
+        }
+    }
+}
+
+// Never let a release build silently fall back to the debug certificate. The
+// official client rejects that certificate during startup verification.
+def releaseSigningConfigured = project.ext.yuehongHasReleaseSigning
+tasks.matching { it.name == 'validateSigningRelease' }.configureEach {
+    doFirst {
+        if (!releaseSigningConfigured) {
+            throw new GradleException(
+                    'Release signing is not configured. Create keystore.properties with '
+                            + 'storeFile, storePassword, keyAlias and keyPassword.'
+            )
+        }
+    }
+}
+tasks.withType(CompileArtProfileTask.class).configureEach {
+    enabled = false
+}
+
+configurations.configureEach {
+    exclude group: 'androidx.profileinstaller', module: 'profileinstaller'
+}
+dependencies {
+    implementation project(':assistant')
+    implementation project(':ghostlock-app')
+    implementation project(':ghostkey-app')
+    implementation managerLibs.bundles.kotlinxCoroutines
+
+    implementation project(':server')
+    implementation project(':api')
+    implementation project(':provider')
+
+    implementation libs.hidden.compat
+    compileOnly libs.hidden.stub
+
+    implementation managerLibs.bundles.core
+    implementation managerLibs.bundles.lifecycle
+
+    implementation managerLibs.material
+
+    def composeBom = platform(managerLibs.composeBom)
+    implementation composeBom
+    implementation managerLibs.bundles.composeUi
+    debugImplementation managerLibs.composeUiTooling
+
+    implementation managerLibs.libsuCore
+
+    implementation managerLibs.bundles.nativeCrypto
+
+    implementation managerLibs.appiconloader
+
+    implementation managerLibs.okhttp
+
+    implementation managerLibs.capsule
+
+    implementation managerLibs.composeMarkdown
+
+    implementation managerLibs.roomRuntime
+    implementation managerLibs.roomKtx
+    ksp managerLibs.roomCompiler
+    implementation managerLibs.gson
+    implementation managerLibs.workRuntimeKtx
+}

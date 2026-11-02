@@ -1,0 +1,98 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenLocal()
+        mavenCentral()
+    }
+
+    plugins {
+        id("com.android.application") version '9.1.1'
+        id("com.android.library") version '9.1.1'
+        id("org.jetbrains.kotlin.android") version '2.4.20'
+        id("org.jetbrains.kotlin.plugin.compose") version "2.4.20"
+        id("org.jetbrains.kotlin.jvm") version "2.4.20"
+        id("com.google.devtools.ksp") version "2.3.12"
+        id("dev.rikka.tools.autoresconfig") version "1.2.2"
+        id("dev.rikka.tools.materialthemebuilder") version "1.5.1"
+        id("dev.rikka.tools.refine") version "4.4.0"
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+
+    repositories {
+        google()
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url("https://jitpack.io")
+            content {
+                includeGroup("com.github.topjohnwu.libsu")
+                includeGroup("com.github.Kyant0")
+                includeGroup("com.github.jeziellago")
+            }
+        }
+    }
+
+    versionCatalogs {
+        serverLibs {
+            from(files('server/server.versions.toml'))
+        }
+
+        apiLibs {
+            from(files('api/api.versions.toml'))
+        }
+
+        managerLibs {
+            from(files('manager/manager.versions.toml'))
+        }
+
+    }
+}
+
+if (System.getenv("JITPACK") != "true") {
+    include ':manager'
+    include ':server'
+    include ':assistant'
+    include ':ghostlock-app'
+    project(':ghostlock-app').projectDir = file('third_party/ghostlock/app')
+    include ':ghostkey-app'
+    project(':ghostkey-app').projectDir = file('third_party/ghostkey/app')
+    include ':profile-core'
+    project(':profile-core').projectDir = file('third_party/ghostlock/profile-core')
+}
+def root = "api"
+
+def propFile = file('local.properties')
+def props = new Properties()
+
+if (propFile.canRead()) {
+    props.load(new FileInputStream(propFile))
+
+    if (props != null) {
+        if (props["api.useLocal"].equals("true")) {
+            root = props["api.dir"]
+        }
+    }
+}
+include ':aidl'
+project(':aidl').projectDir = file("$root${File.separator}aidl")
+
+include ':shared'
+project(':shared').projectDir = file("$root${File.separator}shared")
+
+include ':api'
+project(':api').projectDir = file("$root${File.separator}api")
+
+include ':provider'
+project(':provider').projectDir = file("$root${File.separator}provider")
+
+include ':userservice'
+project(':userservice').projectDir = file("$root${File.separator}userservice")
+
+include ':shizuku-aidl'
+project(':shizuku-aidl').projectDir = file('shizuku/aidl')
+
+include ':shizuku-api'
+project(':shizuku-api').projectDir = file('shizuku/api')

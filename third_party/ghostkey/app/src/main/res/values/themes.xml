@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      界面主体由 Compose 渲染（深色），窗口主题只需保证两点：
+      1. 开窗瞬间的 windowBackground 同为深色，避免白闪；
+      2. 边到边下状态栏图标保持浅色，压在深色背景上才有对比度。
+      透明状态栏/导航栏由 Activity 的 enableEdgeToEdge() 负责，这里不重复声明。
+    -->
+    <style name="Theme.CVE98260" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

@@ -1,0 +1,43 @@
+[package]
+name = "ghostlock-extract"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.97.1"
+description = "GhostLock kernel offset extractor"
+license = "Apache-2.0"
+
+[[bin]]
+name = "ghostlock-extract"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1"
+thiserror = "2"
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+flate2 = "1"
+regex = "1"
+yaxpeax-arm = "0.5"
+yaxpeax-arch = "0.3"
+
+[dependencies.payload-extract]
+package = "payload-extract"
+git = "https://github.com/YuKongA/payload_extract_rs"
+rev = "5534f07298d9f366d6a71daf52cb09141ed96a8a"
+default-features = false
+
+[features]
+default = []
+http = ["payload-extract/http-rustls"]
+
+[dev-dependencies]
+lz4_flex = "0.14"
+prost = "0.14"
+
+[profile.release]
+opt-level = "z"
+lto = "fat"
+codegen-units = 1
+strip = true
+panic = "abort"

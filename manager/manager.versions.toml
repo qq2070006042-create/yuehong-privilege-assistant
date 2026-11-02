@@ -1,0 +1,76 @@
+[versions]
+kotlinxCoroutines = "1.10.2"
+appcompat = "1.7.1"
+browser = "1.8.0"
+coreKtx = "1.17.0"
+fragmentKtx = "1.8.9"
+recyclerview = "1.4.0"
+lifecycle = "2.10.0"
+preferenceKtx = "1.2.1"
+material = "1.13.0"
+composeBom = "2026.01.01"
+activityCompose = "1.12.3"
+navigationCompose = "2.9.7"
+coreSplashscreen = "1.0.1"
+libsuCore = "6.0.0"
+libcxx = "27.0.12077973"
+boringssl = "20250114"
+hiddenApiBypass = "6.1"
+bcpkix = "1.80"
+appiconloader = "1.5.0"
+okhttp = "4.12.0"
+capsule = "2.1.0"
+composeMarkdown = "0.5.4"
+room = "2.7.1"
+gson = "2.13.1"
+work = "2.10.0"
+
+[libraries]
+kotlinxCoroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinxCoroutinesAndroid = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
+
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+browser = { module = "androidx.browser:browser", version.ref = "browser" }
+coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+fragmentKtx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
+lifecycleViewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+lifecycleLivedataKtx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
+lifecycleViewmodelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+preferenceKtx = { module = "androidx.preference:preference-ktx", version.ref = "preferenceKtx" }
+coreSplashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+
+material = { module = "com.google.android.material:material", version.ref = "material" }
+
+composeBom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+composeUi = { module = "androidx.compose.ui:ui" }
+composeUiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview" }
+composeMaterial3 = { module = "androidx.compose.material3:material3" }
+activityCompose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+composeMaterialIconsExtended = { module = "androidx.compose.material:material-icons-extended" }
+composeRuntimeLivedata = { module = "androidx.compose.runtime:runtime-livedata" }
+composeUiGraphics = { module = "androidx.compose.ui:ui-graphics" }
+navigationCompose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+composeUiTooling = { module = "androidx.compose.ui:ui-tooling" }
+
+libsuCore = { module = "com.github.topjohnwu.libsu:core", version.ref = "libsuCore" }
+libcxx = { module = "org.lsposed.libcxx:libcxx", version.ref = "libcxx" }
+boringssl = { module = "io.github.vvb2060.ndk:boringssl", version.ref = "boringssl" }
+hiddenApiBypass = { module = "org.lsposed.hiddenapibypass:hiddenapibypass", version.ref = "hiddenApiBypass" }
+bcpkix = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bcpkix" }
+appiconloader = { module = "me.zhanghai.android.appiconloader:appiconloader", version.ref = "appiconloader" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+capsule = { module = "com.github.Kyant0:Capsule", version.ref = "capsule" }
+composeMarkdown = { module = "com.github.jeziellago:compose-markdown", version.ref = "composeMarkdown" }
+roomRuntime = { module = "androidx.room:room-runtime", version.ref = "room" }
+roomKtx = { module = "androidx.room:room-ktx", version.ref = "room" }
+roomCompiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+workRuntimeKtx = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
+
+[bundles]
+kotlinxCoroutines = ["kotlinxCoroutinesCore", "kotlinxCoroutinesAndroid"]
+core = ["appcompat", "browser", "coreKtx", "fragmentKtx", "recyclerview", "preferenceKtx", "coreSplashscreen"]
+lifecycle = ["lifecycleViewmodelKtx", "lifecycleLivedataKtx", "lifecycleViewmodelCompose"]
+composeUi = ["composeUi", "composeUiToolingPreview", "composeMaterial3", "activityCompose", "composeMaterialIconsExtended", "composeRuntimeLivedata", "composeUiGraphics", "navigationCompose"]
+nativeCrypto = ["libcxx", "boringssl", "hiddenApiBypass", "bcpkix"]

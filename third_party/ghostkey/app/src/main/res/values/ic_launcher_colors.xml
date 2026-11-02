@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 深靛蓝近黑底：与前景钢蓝盾牌 / 青色钥匙形成高对比，也不受动态取色影响 -->
+    <color name="ic_launcher_background">#0F172A</color>
+</resources>

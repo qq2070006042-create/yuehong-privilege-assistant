@@ -1,0 +1,35 @@
+plugins {
+    id('com.android.library')
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'roro.stellar.shared'
+    buildFeatures {
+        buildConfig true
+    }
+    defaultConfig {
+        buildConfigField 'int', 'SERVER_API_VERSION', "${rootProject.ext.api_version_code}"
+        buildConfigField 'String', 'SERVER_API_VERSION_NAME', "\"${rootProject.ext.api_version_name}\""
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
+    kotlin {
+        jvmToolchain(21)
+    }
+}
+
+dependencies {
+    implementation project(':aidl')
+
+    implementation apiLibs.androidxAnnotation
+}
+
+apply from: file('../publish.gradle')

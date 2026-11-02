@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Adaptive icon 前景：盾牌（防护/内核边界） + 钥匙（GhostKey · 取得 root 权限）。
+
+  画布 108dp，系统安全区为中央 66dp（即 21~87）。
+  盾牌主体占 32~76 × 26~84，完整收敛在安全区内，
+  四周（尤其左右 21~32 / 76~87）留白，保证任意厂商形状裁切都不会切到图形。
+  全部为 vector path，无位图、无渐变。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 盾牌主体：钢蓝实心，比背景(#0F172A)亮一档，形成层次 -->
+    <path
+        android:fillColor="#22374F"
+        android:pathData="M54,26L76,32L76,52C76,67 67,77 54,84C41,77 32,67 32,52L32,32Z" />
+
+    <!-- 盾牌描边：强调青色，负责小尺寸下的轮廓辨识度 -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M54,26L76,32L76,52C76,67 67,77 54,84C41,77 32,67 32,52L32,32Z"
+        android:strokeColor="#4DD8C0"
+        android:strokeLineJoin="round"
+        android:strokeWidth="2.6" />
+
+    <!-- 钥匙环：evenOdd 挖出中孔 -->
+    <path
+        android:fillColor="#4DD8C0"
+        android:fillType="evenOdd"
+        android:pathData="M54,35A9,9 0 1,1 54,53A9,9 0 1,1 54,35M54,40.2A3.8,3.8 0 1,0 54,47.8A3.8,3.8 0 1,0 54,40.2" />
+
+    <!-- 钥匙杆 -->
+    <path
+        android:fillColor="#4DD8C0"
+        android:pathData="M51,50h6v21h-6z" />
+
+    <!-- 钥匙齿：两齿，与右侧盾壁之间留有余量 -->
+    <path
+        android:fillColor="#4DD8C0"
+        android:pathData="M57,60.5h4.8v4h-4.8zM57,66.3h4.8v4h-4.8z" />
+</vector>

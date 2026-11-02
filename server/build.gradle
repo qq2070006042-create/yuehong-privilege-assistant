@@ -1,0 +1,35 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'dev.rikka.tools.refine'
+}
+
+android {
+    namespace 'com.stellar.server'
+    buildFeatures {
+        buildConfig = false
+    }
+    kotlin {
+        jvmToolchain(21)
+    }
+}
+dependencies {
+    implementation serverLibs.androidxAnnotation
+
+    implementation serverLibs.gson
+
+    api serverLibs.parcelablelist
+
+    implementation project(':aidl')
+    implementation project(':shared')
+    compileOnly project(':provider')
+    implementation project(':shizuku-aidl')
+    implementation project(':shizuku-api')
+    implementation('dev.rikka.shizuku:provider:13.1.5') {
+        exclude group: 'dev.rikka.shizuku', module: 'aidl'
+    }
+
+    implementation libs.hidden.compat
+    compileOnly libs.hidden.stub
+    implementation libs.refine.runtime
+}

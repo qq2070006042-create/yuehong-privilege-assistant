@@ -1,0 +1,289 @@
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.Properties
+
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.compose'
+}
+
+// Keep the upstream Android module's outputs inside the workspace build tree.
+layout.buildDirectory.set(rootProject.layout.buildDirectory.dir('ghostlock-app'))
+
+def ghostlockRoot = projectDir.parentFile
+def nativeRoot = new File(ghostlockRoot, 'src')
+def extractRoot = new File(ghostlockRoot, 'tools/extract_rs')
+def nativeBuildDir = new File(ghostlockRoot, 'build/native')
+def extractBuildDir = new File(ghostlockRoot, 'build/extract')
+def generatedJniLibs = layout.buildDirectory.dir('generated/jniLibs')
+def generatedArm64JniLibs = generatedJniLibs.map { it.dir('arm64-v8a') }
+def buildInfoSrc = layout.buildDirectory.dir('generated/source/buildInfo')
+
+def appVersionName = '1.2'
+def appVersionCode = 1
+try {
+    def gitProcess = new ProcessBuilder('git', 'rev-list', '--count', 'HEAD')
+            .directory(rootProject.projectDir)
+            .redirectErrorStream(true)
+            .start()
+    def gitOutput = gitProcess.inputStream.getText('UTF-8').trim()
+    def gitExitCode = gitProcess.waitFor()
+    if (gitExitCode != 0) throw new GradleException("git rev-list exited with ${gitExitCode}: ${gitOutput}")
+    appVersionCode = gitOutput.toInteger()
+} catch (Exception exception) {
+    logger.warn("git rev-list failed (${exception.message}); versionCode falls back to 1")
+}
+
+def localProperties = {
+    def properties = new Properties()
+    def propertiesFile = rootProject.file('local.properties')
+    if (propertiesFile.isFile()) {
+        propertiesFile.withInputStream { properties.load(it) }
+    }
+    properties
+}
+
+def resolveNdkDir = {
+    def properties = localProperties()
+    def ndkEnvironment = System.getenv('ANDROID_NDK_HOME') ?: System.getenv('ANDROID_NDK_ROOT')
+    if (ndkEnvironment?.trim()) return new File(ndkEnvironment)
+
+    def ndkProperty = properties.getProperty('ndk.dir')
+    if (ndkProperty?.trim()) return new File(ndkProperty)
+
+    def sdkDir = properties.getProperty('sdk.dir') ?: System.getenv('ANDROID_HOME')
+    if (sdkDir?.trim()) {
+        def ndkRoot = new File(sdkDir, 'ndk')
+        def versions = ndkRoot.listFiles()?.findAll { it.isDirectory() }?.sort { it.name } ?: []
+        if (!versions.isEmpty()) return versions.last()
+    }
+
+    throw new GradleException('NDK not found; set ANDROID_NDK_HOME or ndk.dir in local.properties')
+}
+
+def ndkBinDir = {
+    def osName = System.getProperty('os.name').toLowerCase(Locale.ROOT)
+    def prebuilt = osName.contains('windows') ? 'windows-x86_64' :
+            (osName.contains('mac') ? 'darwin-x86_64' : 'linux-x86_64')
+    new File(resolveNdkDir(), "toolchains/llvm/prebuilt/${prebuilt}/bin")
+}
+
+def resolveCargoExecutable = {
+    def executableName = System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows') ?
+            'cargo.exe' : 'cargo'
+    def cargoOnPath = (System.getenv('PATH') ?: '').split(java.util.regex.Pattern.quote(File.pathSeparator))
+            .collect { new File(it, executableName) }
+            .find { it.isFile() }
+    if (cargoOnPath) return cargoOnPath.absolutePath
+
+    def cargoInRustupHome = new File(System.getProperty('user.home'), ".cargo/bin/${executableName}")
+    cargoInRustupHome.isFile() ? cargoInRustupHome.absolutePath : executableName
+}
+
+def useOndk = {
+    def ondKHome = System.getenv('ONDK_HOME')?.trim() ?: localProperties().getProperty('ondk.dir')?.trim()
+    !!ondKHome
+}
+
+def nativeSources = [
+        'core/main.cpp',
+        'core/attack/ops.cpp',
+        'core/profile/entry.cpp',
+        'core/memory/address_space.cpp',
+        'core/memory/heap_context.cpp',
+        'core/race/pi_race.cpp',
+        'core/route/route_controller.cpp',
+        'core/route/route_middleware.cpp',
+        'core/race/threads.cpp',
+        'core/route/tcp_zerocopy_route.cpp',
+        'core/route/select_stack_route.cpp',
+        'core/route/multicast_waiter_route.cpp',
+        'core/memory/payload_builder.cpp',
+        'core/session/runtime_config.cpp',
+        'core/profile/binary.cpp',
+        'core/support/util.cpp',
+        'core/session/exploit_session.cpp',
+        'core/session/root_child_frontend.cpp',
+        'core/session/backend/cve_2026_43499_backend.cpp',
+        'core/session/handoff_probe.cpp',
+        'core/session/victim_process.cpp',
+        'core/session/victim_context.cpp',
+        'core/support/native_resource.cpp',
+        'core/support/run_state.cpp',
+]
+
+android {
+    namespace 'com.ghostlock.app'
+    compileSdk 37
+
+    defaultConfig {
+        // This module is embedded in the assistant, whose app-wide minimum is Android 10.
+        minSdk 29
+        buildConfigField 'String', 'VERSION_NAME', "\"${appVersionName}\""
+        buildConfigField 'int', 'VERSION_CODE', appVersionCode.toString()
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
+
+    sourceSets {
+        main {
+            java.srcDir(buildInfoSrc.get().asFile)
+            jniLibs.srcDir(generatedJniLibs.get().asFile)
+        }
+    }
+
+    buildFeatures {
+        buildConfig true
+        aidl true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
+
+    packaging {
+        jniLibs {
+            useLegacyPackaging true
+            excludes += 'lib/*/libandroidx.graphics.path.so'
+        }
+    }
+}
+
+kotlin {
+    jvmToolchain(21)
+}
+
+def generateBuildInfo = tasks.register('generateBuildInfo') {
+    description = 'Generate the upstream GhostLock build timestamp.'
+    outputs.dir(buildInfoSrc)
+    outputs.upToDateWhen { false }
+    doLast {
+        def directory = new File(buildInfoSrc.get().asFile, 'com/ghostlock/app')
+        directory.mkdirs()
+        directory.listFiles()?.each { stale -> if (stale.isFile()) stale.delete() }
+        def timeMillis = System.currentTimeMillis()
+        def label = new SimpleDateFormat('yyyy-MM-dd HH:mm:ss', Locale.ROOT).format(new Date(timeMillis))
+        new File(directory, 'BuildInfo.kt').text = """package com.ghostlock.app
+
+/** Generated per build; shown only by debug builds. */
+object BuildInfo {
+    const val BUILD_TIME_EPOCH_MILLIS: Long = ${timeMillis}L
+    const val BUILD_TIME_LABEL: String = \"${label}\"
+}
+"""
+    }
+}
+
+tasks.named('preBuild').configure {
+    dependsOn(generateBuildInfo)
+}
+
+tasks.register('buildGhostlockNative', Exec) {
+    description = 'Build the upstream GhostLock native executable with the Android NDK.'
+    def ndk = resolveNdkDir()
+    def compiler = new File(ndkBinDir(), 'clang++.exe')
+    def output = new File(nativeBuildDir, 'ghostlock')
+    workingDir nativeRoot
+    doFirst { output.parentFile.mkdirs() }
+    def targetConfigDefine = '-DTARGET_CONFIG_H=' + '\\' + '"kernel/target.h' + '\\' + '"'
+    commandLine(([compiler.absolutePath,
+                  '--target=aarch64-linux-android34',
+                  '-O2', '-flto', '-Wall', '-Wextra', '-Wconversion', '-Wsign-conversion',
+                  '-Wno-unused-parameter', '-Wno-sign-compare', '-Wno-unused-function',
+                  '-Icore', targetConfigDefine, '-std=c++23', '-fno-rtti', '-fPIE', '-pie',
+                  '-pthread', '-static-libstdc++'] + nativeSources + ['-o', output.absolutePath]))
+    environment 'ANDROID_NDK_HOME', ndk.absolutePath
+    environment 'NDK_ROOT', ndk.absolutePath
+    inputs.files(fileTree(nativeRoot) { include '**/*.c', '**/*.h', '**/*.cpp', '**/*.hpp' },
+            new File(nativeRoot, 'Makefile'))
+    inputs.property 'sourceFiles', nativeSources
+    outputs.file output
+}
+
+tasks.register('prepareGhostlockJniLibs', Copy) {
+    description = 'Prepare the upstream GhostLock executable for APK packaging.'
+    dependsOn 'buildGhostlockNative'
+    def output = new File(nativeBuildDir, 'ghostlock')
+    def packagedBinary = new File(generatedArm64JniLibs.get().asFile, 'libghostlock.so')
+    from output
+    into generatedArm64JniLibs
+    rename { 'libghostlock.so' }
+    doLast {
+        def strip = new File(ndkBinDir(), 'llvm-strip.exe')
+        def code = new ProcessBuilder(strip.absolutePath, '--strip-all', packagedBinary.absolutePath)
+                .inheritIO().start().waitFor()
+        if (code != 0) throw new GradleException("llvm-strip failed with ${code}")
+    }
+}
+
+tasks.register('buildGhostlockExtract', Exec) {
+    description = 'Build the upstream Rust OTA/image extractor.'
+    def ndkBin = ndkBinDir()
+    def clang = new File(ndkBin, 'aarch64-linux-android34-clang.cmd').absolutePath
+    def ar = new File(ndkBin, 'llvm-ar.exe').absolutePath
+    def cargoCommand = [resolveCargoExecutable()]
+    if (useOndk()) cargoCommand << '+ondk'
+    cargoCommand.addAll(['build', '--release', '--target', 'aarch64-linux-android'])
+    if (useOndk()) {
+        cargoCommand.addAll(['-Z', 'build-std=std,panic_abort'])
+        cargoCommand.addAll(['-Z', 'build-std-features=optimize_for_size'])
+    }
+    workingDir extractRoot
+    commandLine cargoCommand
+    environment 'CC_aarch64_linux_android', clang
+    environment 'AR_aarch64_linux_android', ar
+    environment 'CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER', clang
+    environment 'RUSTFLAGS', '-C force-unwind-tables=no -C link-arg=-Wl,--icf=all'
+    if (useOndk()) environment 'RUSTC_BOOTSTRAP', '1'
+    inputs.files(fileTree(new File(extractRoot, 'src')) { include '**/*.rs' },
+            new File(extractRoot, 'Cargo.toml'), new File(extractRoot, 'Cargo.lock'))
+    inputs.property 'useOndk', useOndk()
+    outputs.file new File(extractBuildDir, 'aarch64-linux-android/release/ghostlock-extract')
+}
+
+tasks.register('prepareGhostlockExtractJniLibs', Copy) {
+    description = 'Prepare the upstream extractor for APK packaging.'
+    dependsOn 'buildGhostlockExtract'
+    from new File(extractBuildDir, 'aarch64-linux-android/release/ghostlock-extract')
+    into generatedArm64JniLibs
+    rename { 'libextract.so' }
+}
+
+tasks.matching { task ->
+    (task.name.startsWith('merge') && task.name.endsWith('JniLibFolders')) ||
+            (task.name.startsWith('merge') && task.name.endsWith('NativeLibs'))
+}.configureEach {
+    dependsOn 'prepareGhostlockJniLibs'
+    dependsOn 'prepareGhostlockExtractJniLibs'
+}
+
+dependencies {
+    implementation platform(managerLibs.composeBom)
+    implementation managerLibs.composeMaterial3
+    implementation 'androidx.activity:activity-compose:1.13.0'
+    implementation 'androidx.compose.foundation:foundation:1.12.1'
+    implementation 'androidx.compose.material:material-icons-extended:1.7.8'
+    implementation 'com.typesafe:config:1.4.9'
+    implementation 'org.apache.commons:commons-compress:1.28.0'
+    implementation('dev.rikka.shizuku:api:13.1.5') {
+        exclude group: 'dev.rikka.shizuku', module: 'aidl'
+    }
+    implementation('dev.rikka.shizuku:provider:13.1.5') {
+        exclude group: 'dev.rikka.shizuku', module: 'aidl'
+    }
+    implementation project(':shizuku-aidl')
+    implementation 'top.yukonga.miuix.kmp:miuix-ui:0.9.4'
+    implementation 'top.yukonga.miuix.kmp:miuix-nav:0.9.4'
+    implementation 'top.yukonga.miuix.kmp:miuix-icons:0.9.4'
+    implementation 'top.yukonga.miuix.kmp:miuix-preference:0.9.4'
+    implementation project(':profile-core')
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.17'
+}

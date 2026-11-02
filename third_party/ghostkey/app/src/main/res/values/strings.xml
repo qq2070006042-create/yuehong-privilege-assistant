@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 应用名唯一定义处：Manifest(android:label)、UI 标题、构建产物名(GhostKey)都源于此 / 与之对齐 -->
+    <string name="app_name">GhostKey</string>
+</resources>

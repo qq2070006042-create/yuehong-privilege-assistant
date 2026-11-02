@@ -1,0 +1,1804 @@
+{
+  "schema": "yuehong-bundled-payloads/1",
+  "source": "Bundled privilege payloads",
+  "payloads": [
+    {
+      "library": "libksu_vivo_neon10pp_6657_a.so",
+      "vendor": "vivo",
+      "displayName": "iQOO Neo10 Pro+",
+      "models": [
+        "iqoo neo10 pro+"
+      ],
+      "kernelVersion": "6.6.57",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "c22d23d363b7158c4bde38449aef7670a69e70b9c0d131c51236d8cd3bf1309f",
+      "size": 147104,
+      "source": "vivo/iQOO neo10 Pro+/6.6.57-…-ga7861f9f1a53-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_neon10pp_6657_b.so",
+      "vendor": "vivo",
+      "displayName": "iQOO Neo10 Pro+",
+      "models": [
+        "iqoo neo10 pro+"
+      ],
+      "kernelVersion": "6.6.57",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "088d8c3c518a73cac30f0bd0b845bfbade8b180fab2b3b30ea63c5f35c9c1f64",
+      "size": 147104,
+      "source": "vivo/iQOO neo10 Pro+/6.6.57-…-gda7e4eafe109-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_neon10pp_6689_a.so",
+      "vendor": "vivo",
+      "displayName": "iQOO Neo10 Pro+",
+      "models": [
+        "iqoo neo10 pro+"
+      ],
+      "kernelVersion": "6.6.89",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "7b9ff7e820c3b741d46b4c2c1c8c11e0a1654cc3f07388dd44956d8076cc1eb6",
+      "size": 147104,
+      "source": "vivo/iQOO neo10 Pro+/6.6.89-…-g1f71897ac249-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_iqoo13_6630_b.so",
+      "vendor": "vivo",
+      "displayName": "iQOO 13",
+      "models": [
+        "iqoo 13"
+      ],
+      "kernelVersion": "6.6.30",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "3874b28e1fff36f9adf219291a6a4303ae42a1624246bfcf4ccd11868409a644",
+      "size": 147104,
+      "source": "vivo/IQOO 13/6.6.30-…-gddea8124c6fe-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_iqoo13_6630_a.so",
+      "vendor": "vivo",
+      "displayName": "iQOO 13",
+      "models": [
+        "iqoo 13"
+      ],
+      "kernelVersion": "6.6.30",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "f58eca3124ab0a34c1e14607041bd87959c5cb7f412670b0de413a13965d1dd3",
+      "size": 147104,
+      "source": "vivo/IQOO 13/6.6.30-…-g24ffe62b0a0e-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_iqoo13_6657_a.so",
+      "vendor": "vivo",
+      "displayName": "iQOO 13",
+      "models": [
+        "iqoo 13"
+      ],
+      "kernelVersion": "6.6.57",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "aa6d442f737bfc77b1305d235696ad964244154d1ea0c6aed8a6152ad2df6ea6",
+      "size": 147104,
+      "source": "vivo/IQOO 13/6.6.57-…-gda7e4eafe109-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_iqoo13_6689_a.so",
+      "vendor": "vivo",
+      "displayName": "iQOO 13",
+      "models": [
+        "iqoo 13"
+      ],
+      "kernelVersion": "6.6.89",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "135080801e86f9e117f1bdcd946715ed93350feee5cef33b9da362787e0ba825",
+      "size": 147104,
+      "source": "vivo/IQOO 13/6.6.89-…-g1f71897ac249-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_neon11_6689_a.so",
+      "vendor": "vivo",
+      "displayName": "iQOO Neo11",
+      "models": [
+        "iqoo neo11",
+        "iqoo 11"
+      ],
+      "kernelVersion": "6.6.89",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "4deb01e21d1c8bdd3d4991f738ec6f16590ec30d2a724f487736da5540eee027",
+      "size": 147104,
+      "source": "vivo/IQOO Neo11/6.6.89-…-g1f71897ac249-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_iqoo13neo11x200u_6689_a.so",
+      "vendor": "vivo",
+      "displayName": "iQOO 13 / iQOO Neo11 / vivo X200 Ultra",
+      "models": [],
+      "kernelVersion": "6.6.89",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> <su>",
+      "sha256": "9033f24d366d78e2ea6a19d8e38a2c8c086dc174afd2c14af1d1efaa1db566de",
+      "size": 157784,
+      "source": "vivo/IQOO13、iQOOneo11，X200U/6.6.89-…/iQOO13 neo11.so"
+    },
+    {
+      "library": "libksu_vivo_neon10p_6630_a.so",
+      "vendor": "vivo",
+      "displayName": "iQOO Neo10 Pro",
+      "models": [
+        "iqoo neo10 pro"
+      ],
+      "kernelVersion": "6.6.30",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "89dc451f03ad08fa5b2173b62e350d3c4612a32e19ffefb805c86d1b24809e93",
+      "size": 147048,
+      "source": "vivo/IQOO Neo10 Pro/6.6.30-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_neon10p_6657_a.so",
+      "vendor": "vivo",
+      "displayName": "iQOO Neo10 Pro",
+      "models": [
+        "iqoo neo10 pro"
+      ],
+      "kernelVersion": "6.6.57",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "5b57e8924e88fd464d2ec2e154fa735315467664aefa21305e8755f8710cb8ab",
+      "size": 147048,
+      "source": "vivo/IQOO Neo10 Pro/6.6.57-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_neon10p_6689_a.so",
+      "vendor": "vivo",
+      "displayName": "iQOO Neo10 Pro",
+      "models": [
+        "iqoo neo10 pro"
+      ],
+      "kernelVersion": "6.6.89",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "9feb0d6fddeb4307c69b3939619232c3049ea21e5a145605f19a6768e01c9a17",
+      "size": 147048,
+      "source": "vivo/IQOO Neo10 Pro/6.6.89-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_z10tp_6657_a.so",
+      "vendor": "vivo",
+      "displayName": "iQOO Z10 Turbo+ / vivo X200 / X200 Pro mini / X200 Pro / X200S / iQOO Neo10 Pro",
+      "models": [
+        "iqoo z10 turbo+"
+      ],
+      "kernelVersion": "6.6.57",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "c0474820eb0bef03fb2a086b1b4dec99c8015f0f03a85eaf399ef52decb563e5",
+      "size": 156824,
+      "source": "vivo/iQOO Z10 Turbo+/6.6.57-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_z10tp_6689_a.so",
+      "vendor": "vivo",
+      "displayName": "iQOO Z10 Turbo+",
+      "models": [
+        "iqoo z10 turbo+"
+      ],
+      "kernelVersion": "6.6.89",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "c0cf336d657e6102e176ee8ffcb823b020492312f7e657e9f4d57d166edbb6ac",
+      "size": 157672,
+      "source": "vivo/iQOO Z10 Turbo+/6.6.89-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_x200_6630_d.so",
+      "vendor": "vivo",
+      "displayName": "vivo X200",
+      "models": [
+        "vivo x200"
+      ],
+      "kernelVersion": "6.6.30",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "8007714786c75909d836e10e708a62095288122b183e29239baeefca1dc4b42c",
+      "size": 147048,
+      "source": "vivo/VIVO X200/6.6.30-…-gdf2db89bad22-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_x200_6630_c.so",
+      "vendor": "vivo",
+      "displayName": "vivo X200",
+      "models": [
+        "vivo x200"
+      ],
+      "kernelVersion": "6.6.30",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "928fdc5fa53db89e6b5698b3ad2bd1582db9c57d229a89387935ce464579a650",
+      "size": 147048,
+      "source": "vivo/VIVO X200/6.6.30-…-g4063ff378d59-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_x200_6630_b.so",
+      "vendor": "vivo",
+      "displayName": "vivo X200",
+      "models": [
+        "vivo x200"
+      ],
+      "kernelVersion": "6.6.30",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "27da87c0f9714ec67403e836a961d90722528e48787e6d606919d024c5f1cdb0",
+      "size": 147048,
+      "source": "vivo/VIVO X200/6.6.30-…-g3c00ef68de5b-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_x200_6630_a.so",
+      "vendor": "vivo",
+      "displayName": "vivo X200",
+      "models": [
+        "vivo x200"
+      ],
+      "kernelVersion": "6.6.30",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "0ba832d0c5e13d2ae2cdf71ee6607b5762684391cdbd90b2e74e7534e9a5d4ea",
+      "size": 147048,
+      "source": "vivo/VIVO X200/6.6.30-…-g24ffe62b0a0e-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_x200_6657_c.so",
+      "vendor": "vivo",
+      "displayName": "vivo X200",
+      "models": [
+        "vivo x200"
+      ],
+      "kernelVersion": "6.6.57",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "91c3080e6cf329896e639321add256749cd6be7d23cf36a7434fd7fdb1f10d53",
+      "size": 147048,
+      "source": "vivo/VIVO X200/6.6.57-…-ge9c3d7352454-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_x200_6657_b.so",
+      "vendor": "vivo",
+      "displayName": "vivo X200",
+      "models": [
+        "vivo x200"
+      ],
+      "kernelVersion": "6.6.57",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "ba5b2da4532c52896f6a943ac73cc72d5fbfcb0a19d3c4ae53ca0c0939be3e24",
+      "size": 147048,
+      "source": "vivo/VIVO X200/6.6.57-…-g5552931da54f-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_x200_6657_a.so",
+      "vendor": "vivo",
+      "displayName": "vivo X200",
+      "models": [
+        "vivo x200"
+      ],
+      "kernelVersion": "6.6.57",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "1701f91770c81cd8b7bc555b48c442e2e0d9ba4f73d4009e639b0431df5a2488",
+      "size": 147048,
+      "source": "vivo/VIVO X200/6.6.57-…-g0d2377693855-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_x200_6689_b.so",
+      "vendor": "vivo",
+      "displayName": "vivo X200",
+      "models": [
+        "vivo x200"
+      ],
+      "kernelVersion": "6.6.89",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "a97b62da740c3af0cce103a11d51ef90be602ec23fc9f721fe834777a1c0041e",
+      "size": 147048,
+      "source": "vivo/VIVO X200/6.6.89-…-gb57af212129c-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_x200_6689_a.so",
+      "vendor": "vivo",
+      "displayName": "vivo X200",
+      "models": [
+        "vivo x200"
+      ],
+      "kernelVersion": "6.6.89",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "e1bd0dbd1dd2ef65f7ac0c27d12b6dc9668982ea2e17f2d76dcd1c5f2f5545e6",
+      "size": 147048,
+      "source": "vivo/VIVO X200/6.6.89-…-g177325e1c8c7-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_x200s_6630_a.so",
+      "vendor": "vivo",
+      "displayName": "vivo X200S",
+      "models": [
+        "vivo x200s"
+      ],
+      "kernelVersion": "6.6.30",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "787389ba729c099c04a9cdf2eac835d1ccaebbab7169da6b6edd1ca481cd6256",
+      "size": 147112,
+      "source": "vivo/VIVO X200S/6.6.30-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_x200s_6657_c.so",
+      "vendor": "vivo",
+      "displayName": "vivo X200S",
+      "models": [
+        "vivo x200s"
+      ],
+      "kernelVersion": "6.6.57",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "d304c6615a4c1fb79dab7bec7c0cfdee6c06672f5cf000f8f75ee7aa39f1d0ad",
+      "size": 147112,
+      "source": "vivo/VIVO X200S/6.6.57-…-ge9c3d7352454-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_x200s_6657_b.so",
+      "vendor": "vivo",
+      "displayName": "vivo X200S",
+      "models": [
+        "vivo x200s"
+      ],
+      "kernelVersion": "6.6.57",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "dc2fa3d821ecaf083926fce4589130c4f5ec92438c43af85d923ca496640e24a",
+      "size": 147048,
+      "source": "vivo/VIVO X200S/6.6.57-…-g5552931da54f-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_x200s_6657_a.so",
+      "vendor": "vivo",
+      "displayName": "vivo X200S",
+      "models": [
+        "vivo x200s"
+      ],
+      "kernelVersion": "6.6.57",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "459afb5d5930d7d8d7c31a450c1c0c03a2e83f578f7581a68ee29750d6e5e254",
+      "size": 147048,
+      "source": "vivo/VIVO X200S/6.6.57-…-g0d2377693855-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_x200s_6689_b.so",
+      "vendor": "vivo",
+      "displayName": "vivo X200S",
+      "models": [
+        "vivo x200s"
+      ],
+      "kernelVersion": "6.6.89",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "ab1bcce345dfa1b04131bcf00ca0d58f2729afd43de3e8d643c42e58010227c1",
+      "size": 147112,
+      "source": "vivo/VIVO X200S/6.6.89-…-gb57af212129c-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_x200s_6689_a.so",
+      "vendor": "vivo",
+      "displayName": "vivo X200S",
+      "models": [
+        "vivo x200s"
+      ],
+      "kernelVersion": "6.6.89",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "02442049ad1ddc9ae2797a965533bbf9503ce186f8092f6ac6c8af980940d960",
+      "size": 147048,
+      "source": "vivo/VIVO X200S/6.6.89-…-g177325e1c8c7-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_pad5pro_66127_a.so",
+      "vendor": "vivo",
+      "displayName": "vivo Pad5 Pro",
+      "models": [
+        "vivo pad5 pro"
+      ],
+      "kernelVersion": "6.6.127",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "7c7c91ab74ebab865ceb698b0526118ef9f864b3f0e3a88ff259230d021fcd1a",
+      "size": 147048,
+      "source": "vivo/VIVO Pad5 Pro/6.6.127-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_pad5pro_6630_a.so",
+      "vendor": "vivo",
+      "displayName": "vivo Pad5 Pro",
+      "models": [
+        "vivo pad5 pro"
+      ],
+      "kernelVersion": "6.6.30",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "b36a91392f89370dd77e77e22bac51a49d8632e693b6f57e0f78619a1937828b",
+      "size": 147048,
+      "source": "vivo/VIVO Pad5 Pro/6.6.30-…/preload.so"
+    },
+    {
+      "library": "libksu_vivo_iqoo12_a15.so",
+      "vendor": "vivo",
+      "displayName": "iQOO 12（Android 15）",
+      "models": [
+        "iqoo 12"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> sh",
+      "sha256": "6b4e788cdcb0b8c4c8607589d6f820a0b32657687dc4386127177af1f734255c",
+      "size": 154240,
+      "source": "vivo/iqoo12 A15/iQOO12.so"
+    },
+    {
+      "library": "libksu_mi_sm8550_a.so",
+      "vendor": "xiaomi",
+      "displayName": "Redmi K90 / Civi 5 Pro / Pad 8 / Turbo 4 Pro（骁龙 8 Gen 3 家族）",
+      "models": [],
+      "kernelVersion": null,
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "576deb3385c38dc283fccb2734e80a87334c4c784520768ede487c002f7d2ad8",
+      "size": 85608,
+      "source": "Xiaomi/Redmi K90.so 等 4 份同二进制"
+    },
+    {
+      "library": "libksu_mi_sm8650_a.so",
+      "vendor": "xiaomi",
+      "displayName": "Redmi K80 Pro / Xiaomi 15 Pro / Xiaomi 15 Ultra（骁龙 8 至尊版家族）",
+      "models": [],
+      "kernelVersion": null,
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "e9090eccf96dd2890fcd2bafcfdc48178b9569fe1fdcf795c90b4290edba5c12",
+      "size": 85608,
+      "source": "Xiaomi/Redmi K80 Pro.so 等 3 份同二进制"
+    },
+    {
+      "library": "libksu_mi_sm8750_a.so",
+      "vendor": "xiaomi",
+      "displayName": "Xiaomi 15 / Xiaomi Pad 8 Pro（骁龙 8 Elite 家族）",
+      "models": [],
+      "kernelVersion": null,
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "9950c6a6483361e68ea550950354e032953406517119a06b3a1b8a5a527045da",
+      "size": 85624,
+      "source": "Xiaomi/Xiaomi 15.so + Xiaomi Pad 8 Pro.so（同一二进制）"
+    },
+    {
+      "library": "libksu_samsung_w26_any_2671.so",
+      "vendor": "samsung",
+      "displayName": "三星 W26（Galaxy Z Fold7 中国版）",
+      "models": [
+        "w26",
+        "sm-f9660"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "2671d27d26aaaf462c7d36b76d8acb6e70983e04e9d8fdd4a49df85d0ef0ec0c",
+      "size": 93576,
+      "source": "用户提供：libw26payload.so"
+    },
+    {
+      "library": "libksu_google_pixel9a_any_09c3.so",
+      "vendor": "google",
+      "displayName": "Pixel 10 Pro Fold（rango）",
+      "models": [
+        "rango"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "09c340d163afe1c7ef0e8b57da2d123f445eaf6aa4dda8387fbeca71a4ad6a98",
+      "size": 82976,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/rango-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_pixel10proxl_any_fbdb.so",
+      "vendor": "google",
+      "displayName": "Pixel 10 Pro XL（mustang）",
+      "models": [
+        "mustang"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "fbdbed0a3e93f3e36d9262b62c0284ae42acbc181417436b20f9298ffa3ad099",
+      "size": 83552,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/mustang-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_pixel10pro_any_c659.so",
+      "vendor": "google",
+      "displayName": "Pixel 10 Pro（blazer）",
+      "models": [
+        "blazer"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "c659561ad500bbd746f22e0ed1e116686a19fe30d8a4b2d07a28accd3dbe8ab0",
+      "size": 82976,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/blazer-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_stallion_any_85fe.so",
+      "vendor": "google",
+      "displayName": "Pixel 10a（stallion）",
+      "models": [
+        "stallion"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260805.005",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "85fe9739aaafbe3fdfe9d71444dfe00d0c5d3f02c103ab6d17f9da1cb3671b9a",
+      "size": 128824,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/stallion-CP2A.260805.005.so"
+    },
+    {
+      "library": "libksu_google_pixel10_any_9052.so",
+      "vendor": "google",
+      "displayName": "Pixel 10（frankel）",
+      "models": [
+        "frankel"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "9052e47b5b3bda2db6acb92590a6b2f0e5d462e0421d1bfc7d7e4d7da38704a8",
+      "size": 118544,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/frankel-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_yogi_any_bbe7.so",
+      "vendor": "google",
+      "displayName": "Pixel 11 Pro Fold（yogi）",
+      "models": [
+        "yogi"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CD1A.260618.001.C3",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "bbe74a56989f4f30ff7650889948287cd19d931f23c9eca4430becfae04f3518",
+      "size": 141600,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/yogi-CD1A.260618.001.C3.so"
+    },
+    {
+      "library": "libksu_google_kodiak_any_8cf2.so",
+      "vendor": "google",
+      "displayName": "Pixel 11 Pro XL（kodiak）",
+      "models": [
+        "kodiak"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CD1A.260618.001.C2",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "8cf274f90f5275f99978a1c7d17278be933ec16a18e3bd460f5d08c3926fc26a",
+      "size": 141600,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/kodiak-CD1A.260618.001.C2.so"
+    },
+    {
+      "library": "libksu_google_grizzly_any_a8eb.so",
+      "vendor": "google",
+      "displayName": "Pixel 11 Pro（grizzly）",
+      "models": [
+        "grizzly"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CD1A.260618.001.C2",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "a8eb8ea380d1748f62fa1cc12e30117eaaf5310dc5dfb761a48adcf5fc4f1899",
+      "size": 141600,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/grizzly-CD1A.260618.001.C2.so"
+    },
+    {
+      "library": "libksu_google_cubs_any_1ed0.so",
+      "vendor": "google",
+      "displayName": "Pixel 11（cubs）",
+      "models": [
+        "cubs"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CD1A.260618.001.C2",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "1ed0b0909c52bc45398a4bd8c326c046fd3adbfd2328738cd614873f2cd59976",
+      "size": 141600,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/cubs-CD1A.260618.001.C2.so"
+    },
+    {
+      "library": "libksu_google_pixel6pro_any_ab56.so",
+      "vendor": "google",
+      "displayName": "Pixel 6 Pro（raven）",
+      "models": [
+        "raven"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "ab56cbb831cb2dc8305ffd4739aa86388180a8918ac22d1e1780c577d051477e",
+      "size": 128824,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/raven-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_pixel6a_any_81ff.so",
+      "vendor": "google",
+      "displayName": "Pixel 6a（bluejay）",
+      "models": [
+        "bluejay"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "81ff9e8c915044f02264e7cec0fd1a7bd564867a00aa827540a79aae5d5d8794",
+      "size": 128600,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/bluejay-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_pixel6a_any_878b.so",
+      "vendor": "google",
+      "displayName": "Pixel 6a（bluejay）",
+      "models": [
+        "bluejay"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP1A.260405.005",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "878bb27d5c6bff466b8c97b1eff402380d8b9ac24436eedb8ce8d4267588d209",
+      "size": 128600,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/bluejay-CP1A.260405.005.so"
+    },
+    {
+      "library": "libksu_google_pixel6_any_46ed.so",
+      "vendor": "google",
+      "displayName": "Pixel 6（oriole）",
+      "models": [
+        "oriole"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "46ed1e49ccbbae2529404876428b1d19501570b5cedfa32bfdf5ce066a989e40",
+      "size": 92440,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/oriole-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_pixel7pro_any_0ad0.so",
+      "vendor": "google",
+      "displayName": "Pixel 7 Pro（cheetah）",
+      "models": [
+        "cheetah"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "0ad04b8fdd88a451f10b0671e1bc454816ed5d4314983e563bcc04c011f706df",
+      "size": 128600,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/cheetah-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_pixel7a_any_6d76.so",
+      "vendor": "google",
+      "displayName": "Pixel 7a（lynx）",
+      "models": [
+        "lynx"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "6d76d20c0235178d27a30517f778a228c7b4dd13c54cc58781cd0c2b49d0857a",
+      "size": 128600,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/lynx-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_pixel7_any_b0d4.so",
+      "vendor": "google",
+      "displayName": "Pixel 7（panther）",
+      "models": [
+        "panther"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "b0d47e35e25846e63a534f6c2c6af0c88fb2ffffcf27550be09528393facae91",
+      "size": 128600,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/panther-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_pixel7_any_e3df.so",
+      "vendor": "google",
+      "displayName": "Pixel 7（panther）",
+      "models": [
+        "panther"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "BP2A.250705.008",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "e3df38d2a9c843649003b554c017d7f118e6062b4011130163325fb558af1b4f",
+      "size": 128824,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/panther-BP2A.250705.008.so"
+    },
+    {
+      "library": "libksu_google_pixel8pro_any_8ec2.so",
+      "vendor": "google",
+      "displayName": "Pixel 8 Pro（husky）",
+      "models": [
+        "husky"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "8ec2aa03ee1c10e419a0c7daeffba62bac854257db5ce0f4f887010b9261c5d9",
+      "size": 128600,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/husky-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_pixel8a_any_7ede.so",
+      "vendor": "google",
+      "displayName": "Pixel 8a（akita）",
+      "models": [
+        "akita"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260805.005",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "7ede4853ee73f2f7cfba24dae5b8c13dc19c197a3afab070820ae6eae1fad356",
+      "size": 92928,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/akita-CP2A.260805.005.so"
+    },
+    {
+      "library": "libksu_google_pixel8_any_f7f1.so",
+      "vendor": "google",
+      "displayName": "Pixel 8（shiba）",
+      "models": [
+        "shiba"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "f7f19cad7ed301c233b1cd0de00e35d765d9935d230f9da51b9d9fbaf92b8fa1",
+      "size": 128600,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/shiba-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_pixel9profold_any_d42f.so",
+      "vendor": "google",
+      "displayName": "Pixel 9 Pro Fold（comet）",
+      "models": [
+        "comet"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "d42f00aff0d8f60fbf9a01175b6485c282336774e975dcd52d3d591351ae1f8c",
+      "size": 128600,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/comet-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_pixel9proxl_any_87e9.so",
+      "vendor": "google",
+      "displayName": "Pixel 9 Pro XL（komodo）",
+      "models": [
+        "komodo"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "87e958f435f9ed992bbb6c72066227fb36fcddfbb1a8e626a2511961800cc276",
+      "size": 128824,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/komodo-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_pixel9pro_any_5032.so",
+      "vendor": "google",
+      "displayName": "Pixel 9 Pro（caiman）",
+      "models": [
+        "caiman"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "5032b91dd1336ff0418888e98996d86017356d5ccd28ecff56c0e1202e3c7409",
+      "size": 128824,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/caiman-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_tegu_any_1bc5.so",
+      "vendor": "google",
+      "displayName": "Pixel 9a（tegu）",
+      "models": [
+        "tegu"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "1bc50989654802541f88ab23fa2b19bc43542dd07563d07d64ee2668e694265e",
+      "size": 92736,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/tegu-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_pixel9_any_c527.so",
+      "vendor": "google",
+      "displayName": "Pixel 9（tokay）",
+      "models": [
+        "tokay"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "AD1A.240905.004",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "c5272c5b5794781d54a21855dd5eb90c7792595d514f09dc8c84e6fa3650771e",
+      "size": 128824,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/tokay-AD1A.240905.004.so"
+    },
+    {
+      "library": "libksu_google_pixel9_any_fccc.so",
+      "vendor": "google",
+      "displayName": "Pixel 9（tokay）",
+      "models": [
+        "tokay"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "fccc392264439314f607b65cd8168be4b52c5a5babec8fd7ce24c83e007c059a",
+      "size": 128824,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/tokay-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_pixelfold_any_1540.so",
+      "vendor": "google",
+      "displayName": "Pixel Fold（felix）",
+      "models": [
+        "felix"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260605.012",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "1540bda01249bd4f6c52dd3ddc43444c1fc0152ba753daf4bed29f822205625d",
+      "size": 128824,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/felix-CP2A.260605.012.so"
+    },
+    {
+      "library": "libksu_google_pixeltablet_any_49fe.so",
+      "vendor": "google",
+      "displayName": "Pixel Tablet（tangorpro）",
+      "models": [
+        "tangorpro"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260705.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "49fedabf57a63d11466cd44fb3eba59f50dc13b7e50711cbee5b6faf81251bae",
+      "size": 128824,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/tangorpro-CP2A.260705.006.so"
+    },
+    {
+      "library": "libksu_google_pixeltablet_any_a9e9.so",
+      "vendor": "google",
+      "displayName": "Pixel Tablet（tangorpro）",
+      "models": [
+        "tangorpro"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "BP1A.250405.007",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "a9e974bb6b80ef471584ca4aeb8bd333236e0a4b65b0c9368445828942fd0f39",
+      "size": 128824,
+      "source": "alex193a/Root-My-Pixel :: app/src/main/assets/exploits/tangorpro-BP1A.250405.007.so"
+    },
+    {
+      "library": "libksu_oppo_oppoa5pro5gcve202643499_any_d77f.so",
+      "vendor": "oppo",
+      "displayName": "OPPO A5 Pro 5G",
+      "models": [
+        "oppo a5 pro 5g"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "d77f3153ce5a754eb64be92002807b32ff75d466ff7d54fb5ecdd10ddd41ff33",
+      "size": 221288,
+      "source": "qsvggff-spec/oppo-A5-PRO-5G-CVE-2026-43499 :: preload-tokay-PKP110.so"
+    },
+    {
+      "library": "libksu_oppo_cve202643499pja110_any_1264.so",
+      "vendor": "oppo",
+      "displayName": "OPPO PJA110",
+      "models": [
+        "pja110"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "126426de1c96ac8b566d59632b997485be90bb639d1733a43713ba4f79c74d8c",
+      "size": 144904,
+      "source": "inforcqb/CVE-2026-43499-pja110 :: preload.so"
+    },
+    {
+      "library": "libksu_oppo_ghostlockforpkj110_any_1abc.so",
+      "vendor": "oppo",
+      "displayName": "OPPO PKJ110",
+      "models": [
+        "pkj110"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "1abc2856f4823da563655a410c605382a4d47a12f046763d0f769b368cff3f48",
+      "size": 229376,
+      "source": "MidPanda/GhostLock-for-PKJ110 :: build/oppo-findx8ultra/bin/preload.so"
+    },
+    {
+      "library": "libksu_oppo_ghostlockoppopckm00_any_5c40.so",
+      "vendor": "oppo",
+      "displayName": "OPPO Reno2（PCKM00）",
+      "models": [
+        "pckm00"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "5c4056bbb9788a56232152b331d3dbe1c39261cd0a8b88ac7a21b303aa6957b9",
+      "size": 169976,
+      "source": "yijiacloud/GhostLock-OPPO-PCKM00 :: exploit/preload.so"
+    },
+    {
+      "library": "libksu_oppo_cve202643499oppomt6835_any_a8ac.so",
+      "vendor": "oppo",
+      "displayName": "OPPO（天玑 MT6835 平台）",
+      "models": [],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "a8ac7d06127ac159ac3f28924c9ec4527b40afa5f8c0b864795e29f74779c292",
+      "size": 175584,
+      "source": "2932796375github/CVE-2026-43499_OPPO-MT6835 :: IonStack/CVE-2026-43499/exploit/build/oppo-pls120-BP2A.250605.015/bin/preload.so"
+    },
+    {
+      "library": "libksu_other_androidcve202643499_any_cc14.so",
+      "vendor": "other",
+      "displayName": "Android-CVE-2026-43499",
+      "models": [],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "cc1428a5b30266c39e43e12272a987d9d197bc06e31254f97d2c88f382c60fa1",
+      "size": 11032,
+      "source": "CakesTwix/Android-CVE-2026-43499 :: app/src/main/jniLibs/arm64-v8a/libpoc64.so"
+    },
+    {
+      "library": "libksu_other_androidcve202643499_any_ccc0.so",
+      "vendor": "other",
+      "displayName": "Android-CVE-2026-43499",
+      "models": [],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "ccc081a675f0211f7660fd50c74787479f60f440654537ab6c0931bd67b08200",
+      "size": 8492,
+      "source": "CakesTwix/Android-CVE-2026-43499 :: app/src/main/jniLibs/arm64-v8a/libpoc32.so"
+    },
+    {
+      "library": "libksu_other_kiandriodapp_k66118-android15_8f83.so",
+      "vendor": "other",
+      "displayName": "Ki-PrisonBreak（通用工具）",
+      "models": [],
+      "kernelVersion": "6.6.118",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "8f8332a9b47c2fe7a4969dd634b6aabb653f8e99e46149850bf24c273eeaae68",
+      "size": 58432,
+      "source": "Ki-073/Ki-Andriod-APP :: app/src/main/jniLibs/arm64-v8a/libghostlock.so"
+    },
+    {
+      "library": "libksu_other_cve202643499appso_any_b4df.so",
+      "vendor": "other",
+      "displayName": "通用载荷（未标机型）",
+      "models": [],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "b4dffdb104fdb3e0227e97e759b45379314f3e9c501d11b63ebf2138da4a826c",
+      "size": 123720,
+      "source": "pimpamebanihah/cve-2026-43499-app.so :: cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_realme_cve202643499rmx5200_any_d2f4.so",
+      "vendor": "realme",
+      "displayName": "realme RMX5200 / RE6030L1",
+      "models": [
+        "rmx5200",
+        "re6030l1"
+      ],
+      "kernelVersion": "6.12.23",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "d2f4a9b29722909f459414ca8c2555f418f84899840162276aaa3ea8172f959d",
+      "size": 87992,
+      "source": "sorrow404Null/CVE-2026-43499-RMX5200 :: bin/preload.so"
+    },
+    {
+      "library": "libksu_samsung_a15_any_29bd.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy A15（SM-A155）",
+      "models": [
+        "sm-a155",
+        "a155"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "A155NKSS6BYH1",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "29bdbf360175ec4cfc3c233b70633086b067b48341a50fb6388b92cc9c1068ef",
+      "size": 104128,
+      "source": "crabcakes97/GhostLock-Nevada :: artifacts/a15-A155NKSS6BYH1/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_a36xq_any_481e.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy A36 5G（SM-A366）",
+      "models": [
+        "sm-a366",
+        "a366"
+      ],
+      "kernelVersion": "6.6.46",
+      "kernelUnknown": false,
+      "buildId": "A366WVLS3AYG1",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "481e3425d5038b7b51820d626783d5b1afb50c3358075582f14c94e5d7b52eec",
+      "size": 128688,
+      "source": "crabcakes97/GhostLock-Nevada :: artifacts/a36xq-A366WVLS3AYG1/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_rmgpcompletehandoff_any_5ccf.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy A37",
+      "models": [
+        "galaxy a37"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "5ccf861aefdc568135dc2f4e986332fd3c32c1a6e612df5a9cb7c534dfb8f00b",
+      "size": 448224,
+      "source": "abdgalaxy36-code/rmgp-complete-handoff :: selftest/a37-final.so"
+    },
+    {
+      "library": "libksu_samsung_rmgpcompletehandoff_any_d0c8.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy A37",
+      "models": [
+        "galaxy a37"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "d0c80cd93c0be25f95b2a2f35fea27ecb59fa4ec15272827fd44409c534a3501",
+      "size": 449040,
+      "source": "abdgalaxy36-code/rmgp-complete-handoff :: RMGP/selftest/a37-final.so"
+    },
+    {
+      "library": "libksu_samsung_essi_any_f280.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy A56 5G（SM-A566）",
+      "models": [
+        "sm-a566",
+        "a566"
+      ],
+      "kernelVersion": "6.6.102",
+      "kernelUnknown": false,
+      "buildId": "A566EXXSCCZG6",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "f28050c5f291386ec539aac668b218d88ab8df43ec159978b2a7b71a329b0bd5",
+      "size": 104128,
+      "source": "crabcakes97/GhostLock-Nevada :: artifacts/essi-A566EXXSCCZG6/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_o1q_any_88e9.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S21 5G（SM-G991）",
+      "models": [
+        "o1q",
+        "sm-g991"
+      ],
+      "kernelVersion": "5.4.274",
+      "kernelUnknown": false,
+      "buildId": "G991USQSHHYI1",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "88e9e4fc52efc76309dcd0fc6afe4cc74ff7931da1f3aa74901eea012b12839f",
+      "size": 78864,
+      "source": "newazbenalam/Root-My-Galaxy-Payloads :: artifacts/o1q-G991USQSHHYI1/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_o1s_any_8a0c.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S21 5G（SM-G991）",
+      "models": [
+        "o1s",
+        "sm-g991"
+      ],
+      "kernelVersion": "5.4.274",
+      "kernelUnknown": false,
+      "buildId": "G991BXXSJHZC2",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "8a0c837da2befba68ee8bf998c1dfd701f3c08c8834bbcafc31a92c126573310",
+      "size": 134920,
+      "source": "kurtulusakyuz/IonStack_S21 :: artifacts/o1s-G991BXXSJHZC2/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_r9q_any_87e4.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S21 FE 5G（SM-G990B2）",
+      "models": [
+        "r9q",
+        "sm-g990b2"
+      ],
+      "kernelVersion": "5.4.289",
+      "kernelUnknown": false,
+      "buildId": "G990B2XXSJIZF1",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "87e479880f2e5686c2a8e643a05265ed6d10b97f4646a4382068143bbb4232cf",
+      "size": 123328,
+      "source": "newazbenalam/Root-My-Galaxy-Payloads :: artifacts/r9q-G990B2XXSJIZF1/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_essi_any_511e.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S23 FE（SM-S721）",
+      "models": [
+        "sm-s721",
+        "s721"
+      ],
+      "kernelVersion": "6.1.157",
+      "kernelUnknown": false,
+      "buildId": "S721NKSSCDZF3",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "511efc33cb2d9ef3aa396034c63e00fbe56af181cfe613245e4b614c7ebeac9f",
+      "size": 104128,
+      "source": "crabcakes97/GhostLock-Nevada :: artifacts/essi-S721NKSSCDZF3/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_rmgs9180fzg1_any_18cf.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S23 Ultra（SM-S9180）",
+      "models": [
+        "sm-s9180",
+        "s9180"
+      ],
+      "kernelVersion": "5.15.189",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "18cf7a3f2c78d0f5af9a443511925b6bd573499a9ac7b91d2873cd82e1243743",
+      "size": 131072,
+      "source": "hackyangwen-lgtm/rmg-s9180-fzg1 :: cve-2026-43499-chc-zh3-app.so"
+    },
+    {
+      "library": "libksu_samsung_rmgs9180fzg1_any_3821.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S23 Ultra（SM-S9180）",
+      "models": [
+        "sm-s9180",
+        "s9180"
+      ],
+      "kernelVersion": "5.15.189",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "38215556b6d366591df2b39281fa559a1648af88c6961ca6b523e2241172c918",
+      "size": 131072,
+      "source": "hackyangwen-lgtm/rmg-s9180-fzg1 :: cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_rmgs9180fzg1_any_7073.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S23 Ultra（SM-S9180）",
+      "models": [
+        "sm-s9180",
+        "s9180"
+      ],
+      "kernelVersion": "5.15.189",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "70737c407e4b7d0e415058f2377f32830f2a06c7377f70df0779dc70bb3ef4ec",
+      "size": 131072,
+      "source": "hackyangwen-lgtm/rmg-s9180-fzg1 :: cve-2026-43499-chc-app.so"
+    },
+    {
+      "library": "libksu_samsung_sms918u_any_9803.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S23 Ultra（SM-S918U）",
+      "models": [
+        "sm-s918u"
+      ],
+      "kernelVersion": "5.15.189",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "980348831d37bd46fa6bc5c737bb6c7bc49144c4bf86ece71f63e9b7234245ff",
+      "size": 134040,
+      "source": "rgnv/GhostUnlock-SM-S918U :: prebuilt/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_dm3q_any_5558.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S23 Ultra（SM-S918）",
+      "models": [
+        "dm3q",
+        "sm-s918"
+      ],
+      "kernelVersion": "5.15.189",
+      "kernelUnknown": false,
+      "buildId": "S9180ZHS8FZF5",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "55586f8e13e2ef57b33a94a8d36f33d6f01f2881310b1fbe5e764bb06ba78bb2",
+      "size": 137728,
+      "source": "crabcakes97/GhostLock-Nevada :: artifacts/dm3q-S9180ZHS8FZF5/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_e3q_any_693d.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S24 Ultra（SM-S928）",
+      "models": [
+        "e3q",
+        "sm-s928"
+      ],
+      "kernelVersion": "6.1.145",
+      "kernelUnknown": false,
+      "buildId": "S928USQS6DZF2",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "693d86f889f3137cfc7d455b1ff9aa4673bd112c98a9ff68382e98b5adc10dbd",
+      "size": 104128,
+      "source": "crabcakes97/GhostLock-Nevada :: artifacts/e3q-S928USQS6DZF2/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_e3q_any_7e9f.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S24 Ultra（SM-S928）",
+      "models": [
+        "e3q",
+        "sm-s928"
+      ],
+      "kernelVersion": "6.1.145",
+      "kernelUnknown": false,
+      "buildId": "S928USQS6DZF2",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "7e9f6e53af1713ba419fd088e2decf174976213a514eaba3dab9dc619dfcd4f6",
+      "size": 129992,
+      "source": "anksgls-sj/-Help-vivo-Y200i-5.10.218-GKI-CVE-2026-43499-stack-reclaim-reaches-0x300-need-0x318 :: 02_exploit/fusion-s24u/build/e3q-S928USQS6DZF2/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_e2s_any_b1fe.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S24+（SM-S926）",
+      "models": [
+        "e2s",
+        "sm-s926"
+      ],
+      "kernelVersion": "6.1.157",
+      "kernelUnknown": false,
+      "buildId": "S926BXXUEDZDR",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "b1fe6dcc2e4d5cbfc13679f2086835c0a2ab2be5624f122b23b0c30954670552",
+      "size": 104128,
+      "source": "crabcakes97/GhostLock-Nevada :: artifacts/e2s-S926BXXUEDZDR/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_e1s_any_1256.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S24（SM-S921）",
+      "models": [
+        "e1s",
+        "sm-s921"
+      ],
+      "kernelVersion": "6.1.157",
+      "kernelUnknown": false,
+      "buildId": "S921NKSSFDZF3",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "1256ab0c500cb44ed46bf79dcf7331bf8e23fe1b047dd980e6048a3ae01a4245",
+      "size": 104128,
+      "source": "crabcakes97/GhostLock-Nevada :: artifacts/e1s-S921NKSSFDZF3/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_e1s_any_c900.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S24（SM-S921）",
+      "models": [
+        "e1s",
+        "sm-s921"
+      ],
+      "kernelVersion": "6.1.157",
+      "kernelUnknown": false,
+      "buildId": "S921BXXSFDZF2",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "c900fac422c134c4b2fda1b6772b335d4e8523f80e444a83922840cf78641014",
+      "size": 104128,
+      "source": "crabcakes97/GhostLock-Nevada :: artifacts/e1s-S921BXXSFDZF2/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_e1s_any_cde4.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S24（SM-S921）",
+      "models": [
+        "e1s",
+        "sm-s921"
+      ],
+      "kernelVersion": "6.1.157",
+      "kernelUnknown": false,
+      "buildId": "S921BXXSFDZE1",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "cde4e9ca1f235f11940513c897de23c97f89f70c7ef0104d071ff1acbbcf1776",
+      "size": 104128,
+      "source": "crabcakes97/GhostLock-Nevada :: artifacts/e1s-S921BXXSFDZE1/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_pa3q_any_6311.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S25 Ultra（SM-S938）",
+      "models": [
+        "pa3q",
+        "sm-s938"
+      ],
+      "kernelVersion": "6.6.98",
+      "kernelUnknown": false,
+      "buildId": "S938NKSUACZF1",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "6311e5ae1a381fd96b8a989e82525521ed9b00cff4e0d3020d3904eb5716587c",
+      "size": 104128,
+      "source": "crabcakes97/GhostLock-Nevada :: artifacts/pa3q-S938NKSUACZF1/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_pa3q_any_d766.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S25 Ultra（SM-S938）",
+      "models": [
+        "pa3q",
+        "sm-s938"
+      ],
+      "kernelVersion": "6.6.98",
+      "kernelUnknown": false,
+      "buildId": "S9380ZHUBCZF1",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "d7665a9d1a05299b395d943e957149a20722705f113fc4915927aa8c3249ac26",
+      "size": 104128,
+      "source": "crabcakes97/GhostLock-Nevada :: artifacts/pa3q-S9380ZHUBCZF1/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_other_cve202643499m3qazf1_any_dd14.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S26 Ultra（SM-S948）",
+      "models": [
+        "m3q",
+        "sm-s948"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "dd14a343fb4c8d8476fec3834f6e91ca14f0148b7f360b35945f9053cf9b41c8",
+      "size": 111088,
+      "source": "Bugel/cve-2026-43499-m3q-azf1 :: bin/preload-4-s1.so"
+    },
+    {
+      "library": "libksu_samsung_m1q_any_4180.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S26（SM-S942）",
+      "models": [
+        "m1q",
+        "sm-s942"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "S942U1UES4AZG3",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "41801a6dddc88d562722668a62a9466e4ae648be308b16d9924c4524be490b70",
+      "size": 162816,
+      "source": "xrzcc/s26-m1q-ghostlock-selinux :: polygraphene/build/m1q-S942U1UES4AZG3/bin/preload.so"
+    },
+    {
+      "library": "libksu_samsung_m1q_any_e9b5.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S26（SM-S942）",
+      "models": [
+        "m1q",
+        "sm-s942"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "BP4A.251205.006",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "e9b599b2d70edef05191fe30479c7be091e02f7faee836615fab3c64a7085c72",
+      "size": 233176,
+      "source": "SammyEnigma/CVE-2026-43499-S26 :: exploit/build/m1q-BP4A.251205.006/bin/preload.so"
+    },
+    {
+      "library": "libksu_samsung_s26m1qghostlockselinux_any_3439.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S26（SM-S942）",
+      "models": [
+        "m1q",
+        "sm-s942"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "34392665968120e0c05f9e2698da4b0c7cdd70ec2e719e8d84e0f173a026f459",
+      "size": 111184,
+      "source": "xrzcc/s26-m1q-ghostlock-selinux :: m3q-azf1/preload-4-s1.so"
+    },
+    {
+      "library": "libksu_samsung_s26m1qghostlockselinux_any_c0a5.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S26（SM-S942）",
+      "models": [
+        "m1q",
+        "sm-s942"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "c0a5777c0f491fba8f401e0213b9df368367dd7da0340c2af647ad3be41df4e5",
+      "size": 125232,
+      "source": "xrzcc/s26-m1q-ghostlock-selinux :: prebuilt/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_s26m1qghostlockselinux_k61230-android16_39ec.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S26（SM-S942）",
+      "models": [
+        "m1q",
+        "sm-s942"
+      ],
+      "kernelVersion": "6.12.30",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "39ec4f052d10fde02f40fd7b01d53a1210eec9e665a233da9d84891f197faa6b",
+      "size": 235712,
+      "source": "xrzcc/s26-m1q-ghostlock-selinux :: m3q-temp-root/preload.so"
+    },
+    {
+      "library": "libksu_samsung_s26m1qghostlockselinux_k61230-android16_4684.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy S26（SM-S942）",
+      "models": [
+        "m1q",
+        "sm-s942"
+      ],
+      "kernelVersion": "6.12.30",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "4684e76c052fbca89f0902906ba57a4ae28bc4d19e93e4621317ba34f722eb92",
+      "size": 235712,
+      "source": "xrzcc/s26-m1q-ghostlock-selinux :: prebuilt/preload-m1q-S942U1UES4AZH5.so"
+    },
+    {
+      "library": "libksu_other_cve202643499t807d_any_b6de.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy Tab S 10.5（SM-T807）",
+      "models": [
+        "sm-t807",
+        "t807"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "b6ded21f90096a2fa2567807f79e7e8ccfdf9802daf4628277a333dd8fe7db71",
+      "size": 139080,
+      "source": "Bobikl/CVE-2026-43499-T807D :: artifacts/production/t807d-popsicle-r562-show-callback-canonical-20260804.so"
+    },
+    {
+      "library": "libksu_other_cve202643499t807d_any_d5c8.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy Tab S 10.5（SM-T807）",
+      "models": [
+        "sm-t807",
+        "t807"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "d5c8cf6d3a0a223f0bb3319ffae926ef3edf56def520b0a99cf7526b4437ec1a",
+      "size": 139600,
+      "source": "Bobikl/CVE-2026-43499-T807D :: test-payload-current-source/t807d-popsicle-current-source-20260808.so"
+    },
+    {
+      "library": "libksu_samsung_q7q_any_dcb2.so",
+      "vendor": "samsung",
+      "displayName": "Galaxy Z Fold7（SM-F966）",
+      "models": [
+        "q7q",
+        "sm-f966"
+      ],
+      "kernelVersion": "6.6.98",
+      "kernelUnknown": false,
+      "buildId": "F966USQU9BZDN",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "dcb20ca0186ab94e897440e478252361e6999fa20178b2c4e2fcefa6bea4d515",
+      "size": 111216,
+      "source": "crabcakes97/GhostLock-Nevada :: artifacts/q7q-F966USQU9BZDN/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_samsung_smg781w_any_b72d.so",
+      "vendor": "samsung",
+      "displayName": "SM-G781W",
+      "models": [
+        "SM-G781W"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "b72d726e0cb8457bdb311f6a928884bf25f9371346b1b5a600602ccc0b81c4db",
+      "size": 309784,
+      "source": "jojobear691/SM-G781W-HYJ1-GhostLock-Temporary-Root :: artifacts/attempt68/ionstack_preload.so"
+    },
+    {
+      "library": "libksu_vivo_rootmyvivoexploit_any_5b30.so",
+      "vendor": "vivo",
+      "displayName": "iQOO Neo11（PD2520）",
+      "models": [
+        "pd2520"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "5b307d0263a07df2929561908d8fe14c5f5a6632edcfc7766fc3e3be5d9192d7",
+      "size": 144720,
+      "source": "zenyxx-xd/RootMyVivo-Exploit :: afunix/build_64560/preload_64560.so"
+    },
+    {
+      "library": "libksu_other_neo8ghostlockadaptation_k61115-android14_7ec9.so",
+      "vendor": "vivo",
+      "displayName": "iQOO Neo8",
+      "models": [
+        "iqoo neo8"
+      ],
+      "kernelVersion": "6.1.115",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "7ec9d4550ce8ab938797b677d09de1982c2587ca497d9e351dde47c6acc91d47",
+      "size": 91056,
+      "source": "MKE84/neo8-ghostlock-adaptation :: bin/preload.so"
+    },
+    {
+      "library": "libksu_vivo_iqooz95gvivot35grootghos_any_3cc6.so",
+      "vendor": "vivo",
+      "displayName": "iQOO Z9 5G",
+      "models": [
+        "iqoo z9 5g"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "3cc696d82fb65a571c61b41fcf79a795529e7059c555618b7a530195c2aa75f1",
+      "size": 136584,
+      "source": "ankitrawatgit/iQOO-Z9_5G-vivo-T3_5G-Root-GhostLock :: payload/build/cve-2026-43499-app.so"
+    },
+    {
+      "library": "libksu_other_ghostlockcve202643499419_any_06b3.so",
+      "vendor": "xiaomi",
+      "displayName": "Redmi K40（4.19 内核）",
+      "models": [
+        "alioth",
+        "k40"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "06b3338e97389cf19767362fe2df1301914266bb1b1f427abe4a8184f99c8054",
+      "size": 157768,
+      "source": "yijiacloud/ghostlock-cve-2026-43499-4.19-k40 :: prebuilt/preload.so"
+    },
+    {
+      "library": "libksu_other_ghostlockcve202643499419_any_7e41.so",
+      "vendor": "xiaomi",
+      "displayName": "Redmi K40（4.19 内核）",
+      "models": [
+        "alioth",
+        "k40"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "7e41ed25fbb049b3e5a8a65185d74dd3972abcfa8200c48aa01ca637e8c15153",
+      "size": 177672,
+      "source": "ccp-p/ghostlock-cve-2026-43499-4.19-k40 :: prebuilt/preload.so"
+    },
+    {
+      "library": "libksu_other_ghostlockcve202643499419_any_a10d.so",
+      "vendor": "xiaomi",
+      "displayName": "Redmi K40（4.19 内核）",
+      "models": [
+        "alioth",
+        "k40"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "a10d727b42855047145bb330df1f2de05a0fc66f7368910bc48cc7effd194fe2",
+      "size": 72400,
+      "source": "ccp-p/ghostlock-cve-2026-43499-4.19-k40 :: build/alioth/bin/preload_slide_h1a_s2.so"
+    },
+    {
+      "library": "libksu_other_cve202643499_any_4c0b.so",
+      "vendor": "xiaomi",
+      "displayName": "Redmi Pad Pro (dizi) / POCO Pad 5G",
+      "models": [
+        "dizi"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "4c0b3f89a984c45338c305a29f664aa986d96dee42126aeb85bdf4c557390ea8",
+      "size": 214616,
+      "source": "MiaPatsune/cve-2026-43499 :: kernel.so"
+    },
+    {
+      "library": "libksu_other_mi8e5unlockerbycve202643_any_6cbb.so",
+      "vendor": "xiaomi",
+      "displayName": "Xiaomi 8E5 系列",
+      "models": [
+        "8e5"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "6cbba72f6a4c32403e2fe3a779e833162e9c59a8640d61b5a154a8a6626d010f",
+      "size": 85608,
+      "source": "joehquak/Mi8E5-Unlocker-by-CVE-2026-43499 :: preload-8e5-Ennea.so"
+    },
+    {
+      "library": "libksu_other_ghostlockxringo1_k66118-android15_e76f.so",
+      "vendor": "xiaomi",
+      "displayName": "小米平板 7 Ultra / 15S Pro（XRing O1）",
+      "models": [],
+      "kernelVersion": "6.6.118",
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "e76f74f2d69108961859fc5a7dd3ccf8ddab2d6d9e042709ab6cae1ede4c075f",
+      "size": 118672,
+      "source": "ayyy7128/ghostlock-xringo1 :: app/src/main/jniLibs/arm64-v8a/libghostlock.so"
+    },
+    {
+      "library": "libksu_xiaomi_jinghu_any_eaef.so",
+      "vendor": "xiaomi",
+      "displayName": "小米平板 7 Ultra（jinghu）",
+      "models": [
+        "jinghu"
+      ],
+      "kernelVersion": null,
+      "kernelUnknown": true,
+      "buildId": "CP2A.260605.012",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "eaeff8baa48a1b00085b789eb5ab4cfc98b9e8206504c67ba086c546c8cf9c57",
+      "size": 151400,
+      "source": "justsoman/CVE-2026-43499-jinghu :: CyberMeowfia-main/IonStack/CVE-2026-43499/exploit/build/jinghu-CP2A.260605.012/bin/preload.so"
+    },
+    {
+      "library": "libbs.so",
+      "vendor": "vivo",
+      "displayName": "内置 all-in-one 库（libbs.so）",
+      "models": [],
+      "kernelVersion": null,
+      "kernelUnknown": false,
+      "buildId": "",
+      "command": "LD_PRELOAD=<payload> /system/bin/id",
+      "sha256": "8c3410cbc7dce25df3274c0e35d293cb38d7ad2384af7ecc549a3400c50695d9",
+      "size": 176544,
+      "source": "内置提权文件清单"
+    }
+  ]
+}
